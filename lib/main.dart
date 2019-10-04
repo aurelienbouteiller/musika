@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musika/widget/ArtistWidget.dart';
+import 'package:musika/widget/ChoiceWidget.dart';
+import 'package:musika/widget/MusicManager.dart';
 
 void main() => runApp(MusikaApp());
 
@@ -27,11 +29,22 @@ class GuessSongPage extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           Center(
-              child: ArtistWidget(
-            artistName: "RaelSan",
-            imageUrl:
-                "https://e-cdns-images.dzcdn.net/images/artist/640e021fabe66e4f866a18d3c1406689/500x500-000000-80-0-0.jpg",
-          ))
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                ArtistWidget(
+                  artistName: "RaelSan",
+                  imageUrl:
+                      "https://e-cdns-images.dzcdn.net/images/artist/640e021fabe66e4f866a18d3c1406689/500x500-000000-80-0-0.jpg",
+                ),
+                MusicManager(
+                  audioUrl:
+                      "https://cdns-preview-c.dzcdn.net/stream/c-c02789a7c21f84abe275eb354d292505-4.mp3",
+                ),
+                ChoiceWidget(
+                  titles: ["Choix 1", "Choix 2", "Choix 3", "Choix 4"],
+                )
+              ]))
         ],
       ),
     );
