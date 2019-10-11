@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:musika/widget/ArtistWidget.dart';
 import 'package:musika/widget/ChoiceWidget.dart';
+import 'package:musika/widget/ColorfulProgressBar.dart';
 import 'package:musika/widget/MusicManager.dart';
+import 'package:musika/widget/ColorfulProgressBarPainter.dart';
 
 void main() => runApp(MusikaApp());
 
@@ -36,6 +38,20 @@ class GuessSongPage extends StatelessWidget {
                   artistName: "RaelSan",
                   imageUrl:
                       "https://e-cdns-images.dzcdn.net/images/artist/640e021fabe66e4f866a18d3c1406689/500x500-000000-80-0-0.jpg",
+                ),
+                ColorfulProgressBar(
+                  height: 25,
+                  width: 300,
+                  animationDuration: Duration(seconds: 30),
+                  fillColor: [
+                    Colors.green,
+                    Colors.green,
+                    Colors.yellow,
+                    Colors.yellow,
+                    Colors.red,
+                    Colors.red,
+                  ],
+                  backgroundColor: Colors.transparent,
                 ),
                 MusicManager(
                   audioUrl:

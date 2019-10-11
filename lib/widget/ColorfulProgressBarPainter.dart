@@ -1,11 +1,12 @@
-
 import 'package:flutter/material.dart';
 
 class ColorfulProgressBarPainter extends CustomPainter {
   final double value;
   final double progressHeight;
   final Color backgroundColor;
-  final Color progressColor;
+  final double progressWidth;
+  final List<MaterialColor> progressColor;
+  final timerValue;
 
   final Paint _paintBackground = Paint();
   final Paint _paintLine = Paint();
@@ -15,13 +16,29 @@ class ColorfulProgressBarPainter extends CustomPainter {
     @required this.progressColor,
     @required this.value,
     this.progressHeight,
+    this.progressWidth,
+    this.timerValue,
   }) {
 
     _paintBackground.color = backgroundColor;
     _paintBackground.strokeWidth = progressHeight;
 
-    _paintLine.color = progressColor;
+    final Gradient gradient = new LinearGradient(
+      colors: progressColor,
+      stops: [
+        0,
+        0.33,
+        0.33,
+        0.66,
+        0.66,
+        1,
+      ],
+    );
+
     _paintLine.strokeWidth = progressHeight;
+    Rect rect = new Rect.fromLTWH(0, 0, progressWidth, progressHeight);
+
+    _paintLine.shader = gradient.createShader(rect);
   }
 
   @override
