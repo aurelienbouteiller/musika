@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:musika/widget/ChoiceButtonWidget.dart';
 
 class ChoiceWidget extends StatelessWidget {
-  const ChoiceWidget({
-    Key key, @required this.titles
-  }) : super(key: key);
-
   final titles;
+  final onPress;
+
+  ChoiceWidget({this.titles, this.onPress});
 
   @override
   Widget build(BuildContext context) {
+    if (titles.isEmpty) {
+      return CircularProgressIndicator();
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -17,15 +19,18 @@ class ChoiceWidget extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-          children:
-            [titles[0], titles[1]].map((title) => ChoiceButtonWidget(title: title)).toList(),
+          children: [titles.elementAt(0), titles.elementAt(1)]
+              .map(
+                  (title) => ChoiceButtonWidget(title: title, onPress: onPress))
+              .toList(),
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children:
-            [titles[2], titles[3]].map((title) => ChoiceButtonWidget(title: title)).toList(),
+          children: [titles.elementAt(2), titles.elementAt(3)]
+              .map(
+                  (title) => ChoiceButtonWidget(title: title, onPress: onPress))
+              .toList(),
         ),
       ],
     );
