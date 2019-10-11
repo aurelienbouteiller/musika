@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 class ChoiceButtonWidget extends StatelessWidget {
   final onPress;
   final title;
+  final bool disabled;
 
-  const ChoiceButtonWidget({Key key, @required this.title, this.onPress})
+  const ChoiceButtonWidget(
+      {Key key, @required this.title, this.onPress, this.disabled})
       : super(key: key);
 
   void onPressed() {
@@ -18,7 +20,9 @@ class ChoiceButtonWidget extends StatelessWidget {
       width: 150,
       height: 75,
       child: FlatButton(
-        onPressed: onPressed,
+        onPressed: disabled ? null : onPressed,
+        disabledColor: Colors.black26,
+        disabledTextColor: Colors.white,
         color: Color(0xffF5B041),
         child: Text(
           title,
@@ -26,8 +30,7 @@ class ChoiceButtonWidget extends StatelessWidget {
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
         ),
-        shape:
-            RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         textColor: Colors.white,
       ),
     );

@@ -1,22 +1,13 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:musika/ApiDeezer.dart';
 import 'package:musika/widget/ArtistWidget.dart';
 import 'package:musika/widget/ChoiceWidget.dart';
 import 'package:musika/widget/MusicManager.dart';
-import 'package:flare_flutter/asset_bundle_cache.dart';
-import 'package:flare_flutter/cache.dart';
-import 'package:flare_flutter/cache_asset.dart';
-import 'package:flare_flutter/flare.dart';
-import 'package:flare_flutter/flare_actor.dart';
-import 'package:flare_flutter/flare_cache.dart';
-import 'package:flare_flutter/flare_cache_asset.dart';
-import 'package:flare_flutter/flare_controller.dart';
-import 'package:flare_flutter/flare_controls.dart';
-import 'package:flare_flutter/flare_render_box.dart';
-import 'package:flare_flutter/flare_testing.dart';
 
 import 'model/Track.dart';
 
@@ -45,11 +36,18 @@ class _GuessSongPageState extends State<GuessSongPage> {
   List<Track> selectedTracks;
   Track selectedTrack;
   bool loadingTrack = false;
+  AudioPlayer audioPlayer;
+  bool answered = false;
 
   @override
   void initState() {
     super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+
     selectedTracks = List<Track>();
+    audioPlayer = AudioPlayer();
     selectFourSongsOfTheArtist(259467);
   }
 
@@ -85,13 +83,17 @@ class _GuessSongPageState extends State<GuessSongPage> {
   }
 
   onChoicePress(chosenTitle) {
+    audioPlayer.stop();
     var isGoodAnswer = chosenTitle == selectedTrack.title;
     var title = isGoodAnswer ? "Bonne réponse" : "Mauvaise réposne";
     var content = isGoodAnswer
         ? "Bravo ! C'était bien: '${selectedTrack.title}'"
         : "Dommage ! Il s'agissait de: '${selectedTrack.title}'";
 
-    return showDialog(
+    setState(() {
+      answered = true;
+    });
+    showDialog(
         context: context,
         builder: (context) => AlertDialog(
               title: Text(title),
@@ -121,9 +123,13 @@ class _GuessSongPageState extends State<GuessSongPage> {
                                 "https://e-cdns-images.dzcdn.net/images/artist/640e021fabe66e4f866a18d3c1406689/500x500-000000-80-0-0.jpg",
                           ),
                           MusicManager(
+                            audioPlayer: audioPlayer,
                             audioUrl: selectedTrack.preview,
                           ),
-                          ChoiceWidget(titles: titles, onPress: onChoicePress)
+                          ChoiceWidget(
+                              titles: titles,
+                              onPress: onChoicePress,
+                              disabled: answered)
                         ]))
         ],
       ),
