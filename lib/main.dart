@@ -19,8 +19,8 @@ import 'package:musika/ApiDeezer.dart';
 import 'package:musika/widget/ArtistWidget.dart';
 import 'package:musika/widget/ChoiceWidget.dart';
 import 'package:musika/widget/ColorfulProgressBar.dart';
+import 'package:musika/widget/LevelWidget.dart';
 import 'package:musika/widget/MusicManager.dart';
-import 'package:musika/widget/ColorfulProgressBarPainter.dart';
 
 import 'model/Track.dart';
 
@@ -29,9 +29,25 @@ void main() => runApp(MusikaApp());
 class MusikaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Musica',
-      home: GuessSongPage(title: 'Flutter Demo Home Page'),
+    return new MaterialApp(
+      home: new LevelWidget(),
+      theme: new ThemeData(
+        brightness: Brightness.light,
+        primaryColor: Color(0xFFfdcb6e),
+        backgroundColor: Color(0xFFdfe6e9),
+        accentColor: Color(0xFFe17055),
+        dividerColor: Color(0xFFdfe6e9),
+        secondaryHeaderColor: Colors.white
+         ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primaryColor: Color(0xFF3a4750),
+        backgroundColor: Colors.black,
+        accentColor: Color(0xFFe17055),
+        dividerColor: Colors.white30,
+        secondaryHeaderColor: Colors.white70
+      ),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
