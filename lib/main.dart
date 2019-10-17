@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:flare_flutter/flare_controller.dart';
 import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,7 +22,7 @@ class MusikaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      home: new SelectLevelPage(),
+      home: new GuessSongPage(),
       theme: new ThemeData(
           brightness: Brightness.light,
           primaryColor: Color(0xFFfdcb6e),
@@ -103,20 +104,33 @@ class _GuessSongPageState extends State<GuessSongPage> {
   onChoicePress(chosenTitle) {
     audioPlayer.stop();
     var isGoodAnswer = chosenTitle == selectedTrack.title;
-    var title = isGoodAnswer ? "Bonne réponse" : "Mauvaise réposne";
     var content = isGoodAnswer
-        ? "Bravo ! C'était bien: '${selectedTrack.title}'"
-        : "Dommage ! Il s'agissait de: '${selectedTrack.title}'";
+        ? "assets/succes-check.flr"
+        : "assets/error-check.flr";
 
     setState(() {
       answered = true;
     });
     showDialog(
+        barrierDismissible: false,
         context: context,
-        builder: (context) => AlertDialog(
-              title: Text(title),
-              content: Text(content),
-            ));
+        builder: (context) => Stack(
+            alignment: Alignment.center,
+          children: [Container(
+            height: 250,
+            width: 250,
+            child: FlareActor(content,
+                alignment: Alignment.center,
+                fit: BoxFit.cover,
+                animation: "Untitled",
+                controller: FlareControls()),
+          ),]
+        ),
+    );
+
+    Future.delayed(Duration(seconds: 4,),() => Navigator.pop(context));
+
+
   }
 
   @override
