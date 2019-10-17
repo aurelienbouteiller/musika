@@ -1,6 +1,17 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:flare_flutter/asset_bundle_cache.dart';
+import 'package:flare_flutter/cache.dart';
+import 'package:flare_flutter/cache_asset.dart';
+import 'package:flare_flutter/flare.dart';
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:flare_flutter/flare_cache.dart';
+import 'package:flare_flutter/flare_cache_asset.dart';
+import 'package:flare_flutter/flare_controller.dart';
+import 'package:flare_flutter/flare_controls.dart';
+import 'package:flare_flutter/flare_render_box.dart';
+import 'package:flare_flutter/flare_testing.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -106,6 +117,10 @@ class _GuessSongPageState extends State<GuessSongPage> {
   @override
   Widget build(BuildContext context) {
     var titles = selectedTracks.map((track) => track.title).toList();
+    final FlareControls _controls = FlareControls();
+    initState() {
+      _controls.play("run");
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -119,11 +134,26 @@ class _GuessSongPageState extends State<GuessSongPage> {
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                          ArtistWidget(
-                            artistName: selectedTrack?.artist?.name,
-                            imageUrl:
-                                "https://e-cdns-images.dzcdn.net/images/artist/640e021fabe66e4f866a18d3c1406689/500x500-000000-80-0-0.jpg",
-                          ),
+                        Row(
+                          children: <Widget>[
+                            ArtistWidget(
+                              artistName: selectedTrack?.artist?.name,
+                              imageUrl:
+                              "https://e-cdns-images.dzcdn.net/images/artist/640e021fabe66e4f866a18d3c1406689/500x500-000000-80-0-0.jpg",
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(left: 40),
+                              alignment: Alignment.center,
+                              width: 155,
+                              height: 155,
+                              child: FlareActor("assets/gramophone.flr",
+                                  alignment: Alignment.center,
+                                  fit: BoxFit.cover,
+                                  animation: "run",
+                                  controller: _controls),
+                            ),
+                          ],
+                        ),
                 ColorfulProgressBar(
                   height: 25,
                   width: 300,
