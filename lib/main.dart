@@ -10,7 +10,6 @@ import 'package:musika/ApiDeezer.dart';
 import 'package:musika/SelectLevelPage.dart';
 import 'package:musika/widget/ArtistWidget.dart';
 import 'package:musika/widget/ChoiceWidget.dart';
-import 'package:musika/widget/ColorfulProgressBar.dart';
 import 'package:musika/widget/MusicManager.dart';
 
 import 'model/Track.dart';
@@ -56,6 +55,7 @@ class _GuessSongPageState extends State<GuessSongPage> {
   bool loadingTrack = false;
   AudioPlayer audioPlayer;
   bool answered = false;
+  bool audioPlaying = false;
 
   @override
   void initState() {
@@ -66,7 +66,14 @@ class _GuessSongPageState extends State<GuessSongPage> {
 
     selectedTracks = List<Track>();
     audioPlayer = AudioPlayer();
+    audioPlayer.onPlayerStateChanged.listen(onAudioChangePlaying);
     selectFourSongsOfTheArtist(259467);
+  }
+
+  onAudioChangePlaying(AudioPlayerState playerEvent) {
+    setState(() {
+      audioPlaying = playerEvent == AudioPlayerState.PLAYING;
+    });
   }
 
   selectFourSongsOfTheArtist(int artistId) async {
@@ -101,6 +108,10 @@ class _GuessSongPageState extends State<GuessSongPage> {
   }
 
   onChoicePress(chosenTitle) {
+    if (!audioPlaying) {
+      return;
+    }
+
     audioPlayer.stop();
     var isGoodAnswer = chosenTitle == selectedTrack.title;
     var title = isGoodAnswer ? "Bonne réponse" : "Mauvaise réposne";
@@ -117,6 +128,10 @@ class _GuessSongPageState extends State<GuessSongPage> {
               title: Text(title),
               content: Text(content),
             ));
+  }
+
+  onPlayButtonPress() {
+    audioPlayer.play(selectedTrack?.preview);
   }
 
   @override
@@ -139,16 +154,19 @@ class _GuessSongPageState extends State<GuessSongPage> {
                     Stack(
                       alignment: Alignment.topCenter,
                       children: [
-                        Container(
-                          margin: EdgeInsets.only(left: 40),
-                          alignment: Alignment.center,
-                          width: 155,
-                          height: 155,
-                          child: FlareActor("assets/gramophone.flr",
-                              alignment: Alignment.center,
-                              fit: BoxFit.cover,
-                              animation: "run",
-                              controller: _controls),
+                        Positioned(
+                          right: 75,
+                          child: Container(
+                            margin: EdgeInsets.only(left: 40),
+                            alignment: Alignment.center,
+                            width: 150,
+                            height: 150,
+                            child: FlareActor("assets/gramophone.flr",
+                                alignment: Alignment.center,
+                                fit: BoxFit.cover,
+                                animation: "run",
+                                controller: _controls),
+                          ),
                         ),
                         ArtistWidget(
                           artistName: selectedTrack?.artist?.name,
@@ -157,27 +175,21 @@ class _GuessSongPageState extends State<GuessSongPage> {
                         ),
                       ],
                     ),
-                    ColorfulProgressBar(
-                      height: 25,
-                      width: 300,
-                      animationDuration: Duration(seconds: 30),
-                      fillColor: [
-                        Colors.green,
-                        Colors.green,
-                        Colors.yellow,
-                        Colors.yellow,
-                        Colors.red,
-                        Colors.red,
-                      ],
-                      backgroundColor: Colors.transparent,
-                    ),
                     MusicManager(
-                        audioPlayer: audioPlayer,
-                        audioUrl: selectedTrack.preview),
+                      onPress: onPlayButtonPress,
+                      audioPlaying: audioPlaying,
+                      answered: answered,
+                    ),
                     ChoiceWidget(
                         titles: titles,
                         onPress: onChoicePress,
                         disabled: answered)
                   ]));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    audioPlayer.stop();
   }
 }

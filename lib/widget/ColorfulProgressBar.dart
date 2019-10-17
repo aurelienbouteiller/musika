@@ -8,9 +8,11 @@ class ColorfulProgressBar extends StatefulWidget {
   final Color backgroundColor;
   List<MaterialColor> fillColor;
   final Duration animationDuration;
+  final bool animating;
 
   ColorfulProgressBar({
     Key key,
+    this.animating,
     this.backgroundColor,
     this.animationDuration,
     this.fillColor,
@@ -24,8 +26,8 @@ class ColorfulProgressBar extends StatefulWidget {
 
 class _ColorfulProgressBarState extends State<ColorfulProgressBar>
     with TickerProviderStateMixin {
-
   AnimationController _controller;
+  bool init;
 
   String get timerString {
     Duration duration = _controller.duration * _controller.value;
@@ -35,6 +37,7 @@ class _ColorfulProgressBarState extends State<ColorfulProgressBar>
   @override
   void initState() {
     super.initState();
+    init = true;
 
     _controller = AnimationController(
       duration: this.widget.animationDuration ?? const Duration(seconds: 30),
@@ -44,10 +47,13 @@ class _ColorfulProgressBarState extends State<ColorfulProgressBar>
 
   @override
   void didUpdateWidget(ColorfulProgressBar oldWidget) {
-    if (true)
-      {
-        _controller.forward();
-      }
+    super.didUpdateWidget(oldWidget);
+    init = false;
+    if (oldWidget.animating == false && widget.animating) {
+      _controller.forward();
+    } else if (oldWidget.animating == true && widget.animating == false) {
+      _controller.stop();
+    }
   }
 
   @override
@@ -62,45 +68,50 @@ class _ColorfulProgressBarState extends State<ColorfulProgressBar>
     final height = this.widget.height;
     final backgroundColor = this.widget.backgroundColor;
 
-    return Column(
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.all(Radius.circular(5))),
-          child: SizedBox(
-            width: width,
-            height: height,
-            child: AspectRatio(
-                aspectRatio: 1,
+    return !init
+        ? Column(
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                child: SizedBox(
+                  width: width,
+                  height: height,
+                  child: AspectRatio(
+                      aspectRatio: 1,
+                      child: AnimatedBuilder(
+                        animation: _controller,
+                        child: Container(),
+                        builder: (context, child) {
+                          return CustomPaint(
+                            child: child,
+                            foregroundPainter: ColorfulProgressBarPainter(
+                              backgroundColor: backgroundColor,
+                              progressColor: widget.fillColor,
+                              value: _controller.value,
+                              progressHeight: height,
+                              progressWidth: width,
+                            ),
+                          );
+                        },
+                      )),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 5),
                 child: AnimatedBuilder(
                   animation: _controller,
-                  child: Container(),
                   builder: (context, child) {
-                    return CustomPaint(
-                      child: child,
-                      foregroundPainter: ColorfulProgressBarPainter(
-                        backgroundColor: backgroundColor,
-                        progressColor: widget.fillColor,
-                        value: _controller.value,
-                        progressHeight: height,
-                        progressWidth: width,
-                      ),
+                    return Text(
+                      timerString,
+                      style: TextStyle(fontSize: 20),
                     );
                   },
-                )),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 5),
-          child: AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child){
-              return Text(timerString, style: TextStyle(fontSize: 20),);
-            },
-          ),
-        ),
-      ],
-    );
+                ),
+              ),
+            ],
+          )
+        : Container();
   }
 }
