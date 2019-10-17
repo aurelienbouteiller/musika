@@ -24,3 +24,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/gramophone.flr
+    - assets/succes-check.flr
+    - assets/error-check.flr
