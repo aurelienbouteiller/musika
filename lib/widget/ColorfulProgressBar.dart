@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:musika/widget/ColorfulProgressBarPainter.dart';
 
+// ignore: must_be_immutable
 class ColorfulProgressBar extends StatefulWidget {
   final double height;
   final double width;
   final Color backgroundColor;
-  Color fillColor;
-  final double value;
+  List<MaterialColor> fillColor;
   final Duration animationDuration;
 
   ColorfulProgressBar({
@@ -16,7 +16,6 @@ class ColorfulProgressBar extends StatefulWidget {
     this.fillColor,
     @required this.height,
     @required this.width,
-    @required this.value,
   }) : super(key: key);
 
   @override
@@ -24,56 +23,31 @@ class ColorfulProgressBar extends StatefulWidget {
 }
 
 class _ColorfulProgressBarState extends State<ColorfulProgressBar>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
 
   AnimationController _controller;
-  Tween<Color> fillColorTween;
-  Tween<double> valueTween;
-  Tween<Color> foregroundColorTween;
+
+  String get timerString {
+    Duration duration = _controller.duration * _controller.value;
+    return '${duration.inMinutes}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
+  }
 
   @override
   void initState() {
     super.initState();
 
-    this._controller = AnimationController(
-      duration: this.widget.animationDuration ?? const Duration(seconds: 1),
+    _controller = AnimationController(
+      duration: this.widget.animationDuration ?? const Duration(seconds: 30),
       vsync: this,
     );
-
-    this.valueTween = Tween<double>(
-      begin: 0,
-      end: this.widget.value,
-    );
-
-    this._controller.forward();
   }
 
   @override
   void didUpdateWidget(ColorfulProgressBar oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (this.widget.value != oldWidget.value) {
-      double beginValue =
-        this.valueTween?.evaluate(this._controller) ?? oldWidget?.value ?? 0;
-
-      this.valueTween = Tween<double>(
-        begin: beginValue,
-        end: this.widget.value ?? 1,
-      );
-
-      if (oldWidget.fillColor != this.widget.fillColor) {
-        this.foregroundColorTween = ColorTween(
-          begin: oldWidget?.fillColor,
-          end: this.widget.fillColor,
-        );
-      } else {
-        this.foregroundColorTween = null;
+    if (true)
+      {
+        _controller.forward();
       }
-
-      this._controller
-        ..value = 0
-        ..forward();
-    }
   }
 
   @override
@@ -88,35 +62,45 @@ class _ColorfulProgressBarState extends State<ColorfulProgressBar>
     final height = this.widget.height;
     final backgroundColor = this.widget.backgroundColor;
 
-    return Container(
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.all(Radius.circular(5))),
-      child: SizedBox(
-        width: width,
-        height: height,
-        child: AspectRatio(
-            aspectRatio: 1,
-            child: AnimatedBuilder(
-              animation: this._controller,
-              child: Container(),
-              builder: (context, child) {
-                final fillColor =
-                  this.fillColorTween?.evaluate(this._controller) ??
-                    this.widget.fillColor;
-
-                return CustomPaint(
-                  child: child,
-                  foregroundPainter: ColorfulProgressBarPainter(
-                    backgroundColor: backgroundColor,
-                    progressColor: fillColor,
-                    value: this.valueTween.evaluate(this._controller),
-                    progressHeight: height,
-                  ),
-                );
-              },
-            )),
-      ),
+    return Column(
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.all(Radius.circular(5))),
+          child: SizedBox(
+            width: width,
+            height: height,
+            child: AspectRatio(
+                aspectRatio: 1,
+                child: AnimatedBuilder(
+                  animation: _controller,
+                  child: Container(),
+                  builder: (context, child) {
+                    return CustomPaint(
+                      child: child,
+                      foregroundPainter: ColorfulProgressBarPainter(
+                        backgroundColor: backgroundColor,
+                        progressColor: widget.fillColor,
+                        value: _controller.value,
+                        progressHeight: height,
+                        progressWidth: width,
+                      ),
+                    );
+                  },
+                )),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 5),
+          child: AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child){
+              return Text(timerString, style: TextStyle(fontSize: 20),);
+            },
+          ),
+        ),
+      ],
     );
   }
 }
