@@ -3,15 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:musika/model/Artist.dart';
 
-class LevelWidget extends StatefulWidget {
-  LevelWidget({Key key}) : super(key: key);
+class SelectLevelPage extends StatefulWidget {
+  SelectLevelPage({Key key}) : super(key: key);
 
   @override
-  _LevelWidgetState createState() => _LevelWidgetState();
+  _SelectLevelPageState createState() => _SelectLevelPageState();
 }
 
-class _LevelWidgetState extends State<LevelWidget> {
-
+class _SelectLevelPageState extends State<SelectLevelPage> {
   List<Artist> artistes;
 
   @override
@@ -35,7 +34,9 @@ class _LevelWidgetState extends State<LevelWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Center(child: Text('Sélection des niveaux', style: TextStyle(color: Theme.of(context).accentColor))),
+          title: Center(
+              child: Text('Sélection des niveaux',
+                  style: TextStyle(color: Theme.of(context).accentColor))),
           backgroundColor: Theme.of(context).backgroundColor,
         ),
         backgroundColor: Theme.of(context).backgroundColor,
@@ -49,14 +50,18 @@ class _LevelWidgetState extends State<LevelWidget> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(5.0),
                   child: Container(
-                    decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+                    decoration:
+                        BoxDecoration(color: Theme.of(context).primaryColor),
                     child: ListTile(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                      contentPadding: EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 10.0),
                       leading: Container(
                         padding: EdgeInsets.only(right: 12.0),
                         decoration: BoxDecoration(
-                          border: Border(
-                            right: BorderSide(width: 1.0, color: Theme.of(context).dividerColor))),
+                            border: Border(
+                                right: BorderSide(
+                                    width: 1.0,
+                                    color: Theme.of(context).dividerColor))),
                         child: CircleAvatar(
                           radius: 25.0,
                           backgroundImage: NetworkImage(
@@ -64,15 +69,22 @@ class _LevelWidgetState extends State<LevelWidget> {
                           ),
                         ),
                       ),
-                      title: Text(artistes[index].name, style: TextStyle(color: Theme.of(context).secondaryHeaderColor, fontWeight: FontWeight.bold)),
-                      trailing: Icon(Icons.keyboard_arrow_right, color: Theme.of(context).secondaryHeaderColor),
+                      title: Text(artistes[index].name,
+                          style: TextStyle(
+                              color: Theme.of(context).secondaryHeaderColor,
+                              fontWeight: FontWeight.bold)),
+                      trailing: Icon(Icons.keyboard_arrow_right,
+                          color: Theme.of(context).secondaryHeaderColor),
                       onTap: () {
                         print(artistes[index].name);
                       },
                       subtitle: Row(
                         children: <Widget>[
-                          Icon(Icons.linear_scale, color: Theme.of(context).accentColor),
-                          Text(" 0/5", style: TextStyle(color: Theme.of(context).accentColor))
+                          Icon(Icons.linear_scale,
+                              color: Theme.of(context).accentColor),
+                          Text(" 0/5",
+                              style: TextStyle(
+                                  color: Theme.of(context).accentColor))
                         ],
                       ),
                     ),

@@ -1,25 +1,16 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:flare_flutter/asset_bundle_cache.dart';
-import 'package:flare_flutter/cache.dart';
-import 'package:flare_flutter/cache_asset.dart';
-import 'package:flare_flutter/flare.dart';
-import 'package:flare_flutter/flare_actor.dart';
-import 'package:flare_flutter/flare_cache.dart';
-import 'package:flare_flutter/flare_cache_asset.dart';
-import 'package:flare_flutter/flare_controller.dart';
-import 'package:flare_flutter/flare_controls.dart';
-import 'package:flare_flutter/flare_render_box.dart';
-import 'package:flare_flutter/flare_testing.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:musika/ApiDeezer.dart';
+import 'package:musika/SelectLevelPage.dart';
 import 'package:musika/widget/ArtistWidget.dart';
 import 'package:musika/widget/ChoiceWidget.dart';
 import 'package:musika/widget/ColorfulProgressBar.dart';
-import 'package:musika/widget/LevelWidget.dart';
 import 'package:musika/widget/MusicManager.dart';
 
 import 'model/Track.dart';
@@ -30,23 +21,21 @@ class MusikaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      home: new LevelWidget(),
+      home: new SelectLevelPage(),
       theme: new ThemeData(
-        brightness: Brightness.light,
-        primaryColor: Color(0xFFfdcb6e),
-        backgroundColor: Color(0xFFdfe6e9),
-        accentColor: Color(0xFFe17055),
-        dividerColor: Color(0xFFdfe6e9),
-        secondaryHeaderColor: Colors.white
-         ),
+          brightness: Brightness.light,
+          primaryColor: Color(0xFFfdcb6e),
+          backgroundColor: Color(0xFFdfe6e9),
+          accentColor: Color(0xFFe17055),
+          dividerColor: Color(0xFFdfe6e9),
+          secondaryHeaderColor: Colors.white),
       darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: Color(0xFF3a4750),
-        backgroundColor: Colors.black,
-        accentColor: Color(0xFFe17055),
-        dividerColor: Colors.white30,
-        secondaryHeaderColor: Colors.white70
-      ),
+          brightness: Brightness.dark,
+          primaryColor: Color(0xFF3a4750),
+          backgroundColor: Colors.black,
+          accentColor: Color(0xFFe17055),
+          dividerColor: Colors.white30,
+          secondaryHeaderColor: Colors.white70),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -139,62 +128,56 @@ class _GuessSongPageState extends State<GuessSongPage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Choix de la musique"),
-      ),
-      body: Stack(
-        children: <Widget>[
-          Center(
-              child: loadingTrack
-                  ? CircularProgressIndicator()
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            ArtistWidget(
-                              artistName: selectedTrack?.artist?.name,
-                              imageUrl:
-                              "https://e-cdns-images.dzcdn.net/images/artist/640e021fabe66e4f866a18d3c1406689/500x500-000000-80-0-0.jpg",
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 40),
+        appBar: AppBar(
+          title: Text("Choix de la musique"),
+        ),
+        body: loadingTrack
+            ? Center(child: CircularProgressIndicator())
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                    Stack(
+                      alignment: Alignment.topCenter,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(left: 40),
+                          alignment: Alignment.center,
+                          width: 155,
+                          height: 155,
+                          child: FlareActor("assets/gramophone.flr",
                               alignment: Alignment.center,
-                              width: 155,
-                              height: 155,
-                              child: FlareActor("assets/gramophone.flr",
-                                  alignment: Alignment.center,
-                                  fit: BoxFit.cover,
-                                  animation: "run",
-                                  controller: _controls),
-                            ),
-                          ],
+                              fit: BoxFit.cover,
+                              animation: "run",
+                              controller: _controls),
                         ),
-                ColorfulProgressBar(
-                  height: 25,
-                  width: 300,
-                  animationDuration: Duration(seconds: 30),
-                  fillColor: [
-                    Colors.green,
-                    Colors.green,
-                    Colors.yellow,
-                    Colors.yellow,
-                    Colors.red,
-                    Colors.red,
-                  ],
-                  backgroundColor: Colors.transparent,
-                ),
-                          MusicManager(
-                            audioPlayer: audioPlayer,
-                            audioUrl: selectedTrack.preview,
-                          ),
-                          ChoiceWidget(
-                              titles: titles,
-                              onPress: onChoicePress,
-                              disabled: answered)
-                        ]))
-        ],
-      ),
-    );
+                        ArtistWidget(
+                          artistName: selectedTrack?.artist?.name,
+                          imageUrl:
+                              "https://e-cdns-images.dzcdn.net/images/artist/640e021fabe66e4f866a18d3c1406689/500x500-000000-80-0-0.jpg",
+                        ),
+                      ],
+                    ),
+                    ColorfulProgressBar(
+                      height: 25,
+                      width: 300,
+                      animationDuration: Duration(seconds: 30),
+                      fillColor: [
+                        Colors.green,
+                        Colors.green,
+                        Colors.yellow,
+                        Colors.yellow,
+                        Colors.red,
+                        Colors.red,
+                      ],
+                      backgroundColor: Colors.transparent,
+                    ),
+                    MusicManager(
+                        audioPlayer: audioPlayer,
+                        audioUrl: selectedTrack.preview),
+                    ChoiceWidget(
+                        titles: titles,
+                        onPress: onChoicePress,
+                        disabled: answered)
+                  ]));
   }
 }
