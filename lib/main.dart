@@ -2,13 +2,11 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flare_flutter/flare.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:musika/ApiDeezer.dart';
-import 'package:musika/SelectArtistPage.dart';
 import 'package:musika/widget/ArtistWidget.dart';
 import 'package:musika/widget/ChoiceWidget.dart';
 import 'package:musika/widget/MusicManager.dart';
@@ -173,20 +171,42 @@ class _GuessSongPageState extends State<GuessSongPage> {
                     Stack(
                       alignment: Alignment.topCenter,
                       children: [
-                        Positioned(
-                          right: 75,
-                          child: Container(
-                            margin: EdgeInsets.only(left: 40),
-                            alignment: Alignment.center,
-                            width: 150,
-                            height: 150,
-                            child: FlareActor(
-                              "assets/gramophone.flr",
-                              alignment: Alignment.center,
-                              fit: BoxFit.cover,
-                              animation: "run",
-                              controller: _controls,
-                              isPaused: !audioPlaying,
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Card(
+                            elevation: 5,
+                            color: Theme.of(context).primaryColor,
+                            child: ClipRRect(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              child: Container(
+                                height: 400,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    Container(
+                                      margin: EdgeInsets.only(left: 40),
+                                      alignment: Alignment.center,
+                                      width: 250,
+                                      height: 250,
+                                      child: FlareActor(
+                                        "assets/gramophone.flr",
+                                        alignment: Alignment.center,
+                                        fit: BoxFit.cover,
+                                        animation: "run",
+                                        controller: _controls,
+                                        isPaused: !audioPlaying,
+                                      ),
+                                    ),
+                                    MusicManager(
+                                      onPress: onPlayButtonPress,
+                                      audioPlaying: audioPlaying,
+                                      answered: answered,
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -196,11 +216,6 @@ class _GuessSongPageState extends State<GuessSongPage> {
                               "https://e-cdns-images.dzcdn.net/images/artist/640e021fabe66e4f866a18d3c1406689/500x500-000000-80-0-0.jpg",
                         ),
                       ],
-                    ),
-                    MusicManager(
-                      onPress: onPlayButtonPress,
-                      audioPlaying: audioPlaying,
-                      answered: answered,
                     ),
                     ChoiceWidget(
                         titles: selectedTracksTitles,

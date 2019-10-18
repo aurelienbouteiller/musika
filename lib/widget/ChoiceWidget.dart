@@ -17,11 +17,11 @@ class ChoiceWidget extends StatelessWidget {
       this.selectedTitleIndex,
       this.chosenTitleIndex});
 
-  choiceColorForIndex(choiceIndex) => answered
+  choiceColorForIndex(context, choiceIndex) => answered
       ? chosenTitleIndex == choiceIndex
           ? selectedTitleIndex == choiceIndex ? Colors.green : Colors.red
           : selectedTitleIndex == choiceIndex ? Colors.green : Colors.grey
-      : Color(0xffF5B041);
+      : Theme.of(context).primaryColor;
 
   @override
   Widget build(BuildContext context) {
@@ -30,35 +30,37 @@ class ChoiceWidget extends StatelessWidget {
     }
     var choiceIndex = 0;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: titles
-              .getRange(0, 2)
-              .map((title) => ChoiceButtonWidget(
-                  title: title,
-                  onPress: onPress,
-                  disabled: disabled,
-                  color: choiceColorForIndex(choiceIndex++)))
-              .toList(),
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: titles
-              .getRange(2, 4)
-              .map((title) => ChoiceButtonWidget(
-                  title: title,
-                  onPress: onPress,
-                  disabled: disabled,
-                  color: choiceColorForIndex(choiceIndex++)))
-              .toList(),
-        ),
-      ],
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: titles
+                .getRange(0, 2)
+                .map((title) => ChoiceButtonWidget(
+                    title: title,
+                    onPress: onPress,
+                    disabled: disabled,
+                    color: choiceColorForIndex(context, choiceIndex++)))
+                .toList(),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: titles
+                .getRange(2, 4)
+                .map((title) => ChoiceButtonWidget(
+                    title: title,
+                    onPress: onPress,
+                    disabled: disabled,
+                    color: choiceColorForIndex(context, choiceIndex++)))
+                .toList(),
+          ),
+        ],
+      ),
     );
   }
 }

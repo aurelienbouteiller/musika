@@ -24,7 +24,8 @@ class ChoiceButtonWidget extends StatelessWidget {
       padding: const EdgeInsets.only(top: 10),
       width: 150,
       height: 75,
-      child: FlatButton(
+      child: MaterialButton(
+        elevation: 3,
         onPressed: disabled ? null : onPressed,
         disabledColor: Colors.black26,
         disabledTextColor: Colors.white,
