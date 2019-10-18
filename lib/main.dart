@@ -59,6 +59,7 @@ class _GuessSongPageState extends State<GuessSongPage> {
   List<String> selectedTracksTitles;
   int selectedTitleIndex;
   int chosenTitleIndex;
+  int audioPlayerPosition;
 
   @override
   void initState() {
@@ -69,7 +70,11 @@ class _GuessSongPageState extends State<GuessSongPage> {
 
     selectedTracks = List<Track>();
     audioPlayer = AudioPlayer();
+    audioPlayerPosition = 0;
     audioPlayer.onPlayerStateChanged.listen(onAudioChangePlaying);
+    audioPlayer.onAudioPositionChanged.listen((position) => setState(() {
+          audioPlayerPosition = position.inMilliseconds;
+        }));
     selectFourSongsOfTheArtist(259467);
   }
 
@@ -114,17 +119,20 @@ class _GuessSongPageState extends State<GuessSongPage> {
     });
   }
 
-  onChoicePress(chosenTitle) {
+  onChoicePress(chosenTitle) async {
     if (!audioPlaying) {
       return;
     }
-
+    var position = await audioPlayer.getCurrentPosition();
     audioPlayer.stop();
+
     var isGoodAnswer = chosenTitle == selectedTrack.title;
     chosenTitleIndex =
         selectedTracksTitles.indexWhere((title) => chosenTitle == title);
     var content =
         isGoodAnswer ? "assets/succes-check.flr" : "assets/error-check.flr";
+    var score =
+        isGoodAnswer ? position < 20000 ? position < 10000 ? 30 : 20 : 10 : 0;
 
     setState(() {
       answered = true;
@@ -133,9 +141,8 @@ class _GuessSongPageState extends State<GuessSongPage> {
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) {
-        return ScoreWidget(flareAnimationFile: content, score: 30);
-      },
+      builder: (context) =>
+          ScoreWidget(flareAnimationFile: content, score: score),
     );
 
     Future.delayed(
@@ -193,7 +200,8 @@ class _GuessSongPageState extends State<GuessSongPage> {
                                         flex: 1,
                                         child: MusicManager(
                                           onPress: onPlayButtonPress,
-                                          audioPlaying: audioPlaying,
+                                          audioPlaying: audioPlaying &&
+                                              audioPlayerPosition > 0,
                                           answered: answered,
                                         ),
                                       ),
