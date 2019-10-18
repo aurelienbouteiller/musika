@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:musika/main.dart';
 import 'package:musika/model/Artist.dart';
 
 class SelectLevelPage extends StatefulWidget {
@@ -22,11 +23,11 @@ class _SelectLevelPageState extends State<SelectLevelPage> {
     ]);
 
     artistes = [
-      Artist(id: 1, name: "Didier San"),
-      Artist(id: 2, name: "Paulo San"),
-      Artist(id: 3, name: "Karma San"),
-      Artist(id: 4, name: "Hola San"),
-      Artist(id: 5, name: "Poney San")
+      Artist(id: 1, name: "Parme San"),
+      Artist(id: 2, name: "San Iter"),
+      Artist(id: 3, name: "San Ex"),
+      Artist(id: 4, name: "San étoi"),
+      Artist(id: 5, name: "Ni San")
     ];
   }
 
