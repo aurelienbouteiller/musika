@@ -126,7 +126,6 @@ class _GuessSongPageState extends State<GuessSongPage> {
     var content =
         isGoodAnswer ? "assets/succes-check.flr" : "assets/error-check.flr";
 
-
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -159,62 +158,65 @@ class _GuessSongPageState extends State<GuessSongPage> {
             : Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                    Stack(
-                      alignment: Alignment.topCenter,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Card(
-                            elevation: 5,
-                            color: Theme.of(context).primaryColor,
-                            child: ClipRRect(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
-                              child: Container(
-                                height: 400,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.only(left: 40),
-                                      alignment: Alignment.center,
-                                      width: 250,
-                                      height: 250,
-                                      child: FlareActor(
-                                        "assets/gramophone.flr",
-                                        alignment: Alignment.center,
-                                        fit: BoxFit.cover,
-                                        animation: "run",
-                                        controller: _controls,
-                                        isPaused: !audioPlaying,
+                    Expanded(
+                      flex: 2,
+                      child: Stack(
+                        alignment: Alignment.topCenter,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Card(
+                              elevation: 5,
+                              color: Theme.of(context).primaryColor,
+                              child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                child: Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Expanded(
+                                        flex: 1,
+                                        child: FlareActor(
+                                          "assets/gramophone.flr",
+                                          alignment: Alignment.center,
+                                          animation: "run",
+                                          controller: _controls,
+                                          isPaused: !audioPlaying,
+                                        ),
                                       ),
-                                    ),
-                                    MusicManager(
-                                      onPress: onPlayButtonPress,
-                                      audioPlaying: audioPlaying,
-                                      answered: answered,
-                                    ),
-                                  ],
+                                      Expanded(
+                                        flex: 1,
+                                        child: MusicManager(
+                                          onPress: onPlayButtonPress,
+                                          audioPlaying: audioPlaying,
+                                          answered: answered,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        ArtistWidget(
-                          artistName: selectedTrack?.artist?.name,
-                          imageUrl:
-                              "https://e-cdns-images.dzcdn.net/images/artist/640e021fabe66e4f866a18d3c1406689/500x500-000000-80-0-0.jpg",
-                        ),
-                      ],
+                          ArtistWidget(
+                            artistName: selectedTrack?.artist?.name,
+                            imageUrl:
+                                "https://e-cdns-images.dzcdn.net/images/artist/640e021fabe66e4f866a18d3c1406689/500x500-000000-80-0-0.jpg",
+                          ),
+                        ],
+                      ),
                     ),
-                    ChoiceWidget(
-                        titles: selectedTracksTitles,
-                        selectedTitleIndex: selectedTitleIndex,
-                        chosenTitleIndex: chosenTitleIndex,
-                        onPress: onChoicePress,
-                        answered: answered,
-                        disabled: !audioPlaying && !answered)
+                    Expanded(
+                      flex: 1,
+                      child: ChoiceWidget(
+                          titles: selectedTracksTitles,
+                          selectedTitleIndex: selectedTitleIndex,
+                          chosenTitleIndex: chosenTitleIndex,
+                          onPress: onChoicePress,
+                          answered: answered,
+                          disabled: !audioPlaying && !answered),
+                    )
                   ]));
   }
 
