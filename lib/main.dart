@@ -3,12 +3,10 @@ import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flare_flutter/flare_actor.dart';
-import 'package:flare_flutter/flare_controller.dart';
 import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:musika/ApiDeezer.dart';
-import 'package:musika/SelectLevelPage.dart';
 import 'package:musika/widget/ArtistWidget.dart';
 import 'package:musika/widget/ChoiceWidget.dart';
 import 'package:musika/widget/MusicManager.dart';
@@ -57,6 +55,9 @@ class _GuessSongPageState extends State<GuessSongPage> {
   AudioPlayer audioPlayer;
   bool answered = false;
   bool audioPlaying = false;
+  List<String> selectedTracksTitles;
+  int selectedTitleIndex;
+  int chosenTitleIndex;
 
   @override
   void initState() {
@@ -103,7 +104,11 @@ class _GuessSongPageState extends State<GuessSongPage> {
     }
     setState(() {
       selectedTracks = randomTracks;
+      selectedTracksTitles =
+          selectedTracks.map((track) => track.title).toList();
       selectedTrack = randomTracks.elementAt(random.nextInt(4));
+      selectedTitleIndex = selectedTracksTitles
+          .indexWhere((title) => selectedTrack.title == title);
       loadingTrack = false;
     });
   }
@@ -115,33 +120,35 @@ class _GuessSongPageState extends State<GuessSongPage> {
 
     audioPlayer.stop();
     var isGoodAnswer = chosenTitle == selectedTrack.title;
-    var content = isGoodAnswer
-        ? "assets/succes-check.flr"
-        : "assets/error-check.flr";
+    chosenTitleIndex =
+        selectedTracksTitles.indexWhere((title) => chosenTitle == title);
+    var content =
+        isGoodAnswer ? "assets/succes-check.flr" : "assets/error-check.flr";
 
     setState(() {
       answered = true;
     });
     showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) => Stack(
-            alignment: Alignment.center,
-          children: [Container(
-            height: 250,
-            width: 250,
-            child: FlareActor(content,
-                alignment: Alignment.center,
-                fit: BoxFit.cover,
-                animation: "Untitled",
-                controller: FlareControls()),
-          ),]
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => Stack(alignment: Alignment.center, children: [
+        Container(
+          height: 250,
+          width: 250,
+          child: FlareActor(content,
+              alignment: Alignment.center,
+              fit: BoxFit.cover,
+              animation: "Untitled",
+              controller: FlareControls()),
         ),
+      ]),
     );
 
-    Future.delayed(Duration(seconds: 4,),() => Navigator.pop(context));
-
-
+    Future.delayed(
+        Duration(
+          seconds: 4,
+        ),
+        () => Navigator.pop(context));
   }
 
   onPlayButtonPress() {
@@ -150,11 +157,7 @@ class _GuessSongPageState extends State<GuessSongPage> {
 
   @override
   Widget build(BuildContext context) {
-    var titles = selectedTracks.map((track) => track.title).toList();
     final FlareControls _controls = FlareControls();
-    initState() {
-      _controls.play("run");
-    }
 
     return Scaffold(
         appBar: AppBar(
@@ -175,11 +178,14 @@ class _GuessSongPageState extends State<GuessSongPage> {
                             alignment: Alignment.center,
                             width: 150,
                             height: 150,
-                            child: FlareActor("assets/gramophone.flr",
-                                alignment: Alignment.center,
-                                fit: BoxFit.cover,
-                                animation: "run",
-                                controller: _controls),
+                            child: FlareActor(
+                              "assets/gramophone.flr",
+                              alignment: Alignment.center,
+                              fit: BoxFit.cover,
+                              animation: "run",
+                              controller: _controls,
+                              isPaused: !audioPlaying,
+                            ),
                           ),
                         ),
                         ArtistWidget(
@@ -195,9 +201,12 @@ class _GuessSongPageState extends State<GuessSongPage> {
                       answered: answered,
                     ),
                     ChoiceWidget(
-                        titles: titles,
+                        titles: selectedTracksTitles,
+                        selectedTitleIndex: selectedTitleIndex,
+                        chosenTitleIndex: chosenTitleIndex,
                         onPress: onChoicePress,
-                        disabled: answered)
+                        answered: answered,
+                        disabled: !audioPlaying && !answered)
                   ]));
   }
 
