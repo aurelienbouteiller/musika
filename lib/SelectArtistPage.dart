@@ -1,17 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:musika/main.dart';
 import 'package:musika/model/Artist.dart';
 
-class SelectLevelPage extends StatefulWidget {
-  SelectLevelPage({Key key}) : super(key: key);
+class SelectArtistPage extends StatefulWidget {
+  SelectArtistPage({Key key}) : super(key: key);
 
   @override
-  _SelectLevelPageState createState() => _SelectLevelPageState();
+  _SelectArtistPageState createState() => _SelectArtistPageState();
 }
 
-class _SelectLevelPageState extends State<SelectLevelPage> {
+class _SelectArtistPageState extends State<SelectArtistPage> {
   List<Artist> artistes;
 
   @override
@@ -36,7 +35,7 @@ class _SelectLevelPageState extends State<SelectLevelPage> {
     return Scaffold(
         appBar: AppBar(
           title: Center(
-              child: Text('Sélection des niveaux',
+              child: Text("Sélection de l'artiste",
                   style: TextStyle(color: Theme.of(context).accentColor))),
           backgroundColor: Theme.of(context).backgroundColor,
         ),
