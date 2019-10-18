@@ -3,7 +3,6 @@ import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/material.dart';
 
 class ScoreWidget extends StatefulWidget {
-
   final flareAnimationFile;
   final score;
 
@@ -13,13 +12,18 @@ class ScoreWidget extends StatefulWidget {
   _ScoreWidgetState createState() => _ScoreWidgetState();
 }
 
-class _ScoreWidgetState extends State<ScoreWidget> with SingleTickerProviderStateMixin {
-
+class _ScoreWidgetState extends State<ScoreWidget>
+    with SingleTickerProviderStateMixin {
   AnimationController _controller;
   Animation<double> _animation;
 
   @override
   Widget build(BuildContext context) {
+    var score = widget.score;
+    var scoreText = score == 10
+        ? "Bof..."
+        : score == 20 ? "Pas mal !" : score == 30 ? "Excellent !" : "NUL !";
+
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       Container(
           height: 250,
@@ -41,7 +45,7 @@ class _ScoreWidgetState extends State<ScoreWidget> with SingleTickerProviderStat
               fontSize: _animation.value.toDouble(),
               fontWeight: FontWeight.bold,
             ),
-            child: Text("+${widget.score}"),
+            child: Text("$scoreText +$score"),
           ),
         ),
       )
@@ -60,11 +64,10 @@ class _ScoreWidgetState extends State<ScoreWidget> with SingleTickerProviderStat
     _animation = _controller.drive(Tween(
       begin: 0,
       end: 40,
-    ))..addListener((){
-      setState(() {
-
+    ))
+      ..addListener(() {
+        setState(() {});
       });
-    });
     _controller.forward();
   }
 }
