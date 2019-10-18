@@ -4,9 +4,14 @@ class ChoiceButtonWidget extends StatelessWidget {
   final onPress;
   final title;
   final bool disabled;
+  final Color color;
 
   const ChoiceButtonWidget(
-      {Key key, @required this.title, this.onPress, this.disabled})
+      {Key key,
+      @required this.title,
+      this.onPress,
+      this.disabled,
+      @required this.color})
       : super(key: key);
 
   void onPressed() {
@@ -23,7 +28,7 @@ class ChoiceButtonWidget extends StatelessWidget {
         onPressed: disabled ? null : onPressed,
         disabledColor: Colors.black26,
         disabledTextColor: Colors.white,
-        color: Color(0xffF5B041),
+        color: color,
         child: Text(
           title,
           textAlign: TextAlign.center,
