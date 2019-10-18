@@ -26,6 +26,8 @@ class _MusicManagerState extends State<MusicManager> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         ColorfulProgressBar(
           animating: widget.audioPlaying,
