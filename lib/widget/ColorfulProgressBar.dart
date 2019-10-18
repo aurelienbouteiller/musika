@@ -31,7 +31,8 @@ class _ColorfulProgressBarState extends State<ColorfulProgressBar>
 
   String get timerString {
     Duration duration = _controller.duration * _controller.value;
-    return '${duration.inMinutes}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
+    int durationLeft = 30 - duration.inSeconds;
+    return '0:${durationLeft.toString().padLeft(2, '0')}';
   }
 
   @override
