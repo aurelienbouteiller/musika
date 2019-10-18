@@ -126,6 +126,10 @@ class _GuessSongPageState extends State<GuessSongPage> {
     var content =
         isGoodAnswer ? "assets/succes-check.flr" : "assets/error-check.flr";
 
+    setState(() {
+      answered = true;
+    });
+
     showDialog(
       barrierDismissible: false,
       context: context,

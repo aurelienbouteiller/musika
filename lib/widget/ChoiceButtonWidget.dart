@@ -27,7 +27,7 @@ class ChoiceButtonWidget extends StatelessWidget {
       child: MaterialButton(
         elevation: 3,
         onPressed: disabled ? null : onPressed,
-        disabledColor: Colors.black26,
+        disabledColor: color,
         disabledTextColor: Colors.white,
         color: color,
         child: Text(
