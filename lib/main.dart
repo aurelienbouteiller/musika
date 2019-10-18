@@ -10,6 +10,7 @@ import 'package:musika/ApiDeezer.dart';
 import 'package:musika/widget/ArtistWidget.dart';
 import 'package:musika/widget/ChoiceWidget.dart';
 import 'package:musika/widget/MusicManager.dart';
+import 'package:musika/widget/ScoreWidget.dart';
 
 import 'model/Track.dart';
 
@@ -125,23 +126,13 @@ class _GuessSongPageState extends State<GuessSongPage> {
     var content =
         isGoodAnswer ? "assets/succes-check.flr" : "assets/error-check.flr";
 
-    setState(() {
-      answered = true;
-    });
+
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => Stack(alignment: Alignment.center, children: [
-        Container(
-          height: 250,
-          width: 250,
-          child: FlareActor(content,
-              alignment: Alignment.center,
-              fit: BoxFit.cover,
-              animation: "Untitled",
-              controller: FlareControls()),
-        ),
-      ]),
+      builder: (context) {
+        return ScoreWidget(flareAnimationFile: content, score: 30);
+      },
     );
 
     Future.delayed(
