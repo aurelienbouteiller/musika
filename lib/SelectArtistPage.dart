@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:musika/main.dart';
 import 'package:musika/model/Artist.dart';
 
 class SelectArtistPage extends StatefulWidget {
@@ -99,7 +100,7 @@ class _SelectArtistPageState extends State<SelectArtistPage> {
                             trailing: Icon(Icons.keyboard_arrow_right,
                                 color: Theme.of(context).secondaryHeaderColor),
                             onTap: () {
-                              print(artistes[index].name);
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => GuessSongPage()));
                             },
                             subtitle: Row(
                               children: <Widget>[
