@@ -1,33 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:musika/main.dart';
-import 'package:musika/model/Artist.dart';
+
+import 'Level.dart';
+import 'model/Artist.dart';
 
 class SelectArtistPage extends StatefulWidget {
-  SelectArtistPage({Key key, this.niveau}) : super(key: key);
+  SelectArtistPage({Key key, this.level}) : super(key: key);
 
-  final String niveau;
+  final Level level;
 
   @override
   _SelectArtistPageState createState() => _SelectArtistPageState();
 }
 
 class _SelectArtistPageState extends State<SelectArtistPage> {
-  List<Artist> artistes;
-
-  @override
-  void initState() {
-    super.initState();
-
-    artistes = [
-      Artist(id: 1, name: "Parme San"),
-      Artist(id: 2, name: "San Iter"),
-      Artist(id: 3, name: "San Ex"),
-      Artist(id: 4, name: "San étoi"),
-      Artist(id: 5, name: "Ni San")
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +27,7 @@ class _SelectArtistPageState extends State<SelectArtistPage> {
         body: Column(
           children: <Widget>[
             Hero(
-              tag: widget.niveau,
+              tag: widget.level.id,
               child: SizedBox(
                 width: double.infinity,
                 height: 125.0,
@@ -51,13 +38,13 @@ class _SelectArtistPageState extends State<SelectArtistPage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5.0),
                     child: Container(
-                      decoration:
-                      BoxDecoration(color: Theme.of(context).primaryColor),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
-                        child: Text(widget.niveau),
-                      )
-                    ),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 8.0),
+                          child: Text("Niveau ${widget.level.id}"),
+                        )),
                   ),
                 ),
               ),
@@ -65,17 +52,21 @@ class _SelectArtistPageState extends State<SelectArtistPage> {
             Expanded(
               child: ListView.builder(
                   scrollDirection: Axis.vertical,
-                  itemCount: artistes.length,
+                  itemCount: widget.level.artistList.length,
                   itemBuilder: (context, index) {
+                    Artist currentArtist =
+                        widget.level.artistList.elementAt(index);
+
                     return Card(
                       elevation: 4.5,
                       color: Colors.transparent,
-                      margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(5.0),
                         child: Container(
-                          decoration:
-                              BoxDecoration(color: Theme.of(context).primaryColor),
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor),
                           child: ListTile(
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 20.0, vertical: 10.0),
@@ -85,22 +76,27 @@ class _SelectArtistPageState extends State<SelectArtistPage> {
                                   border: Border(
                                       right: BorderSide(
                                           width: 1.0,
-                                          color: Theme.of(context).dividerColor))),
+                                          color:
+                                              Theme.of(context).dividerColor))),
                               child: CircleAvatar(
                                 radius: 25.0,
                                 backgroundImage: NetworkImage(
-                                  "https://api.deezer.com/artist/27/image",
+                                  "https://api.deezer.com/artist/${currentArtist.id}/image",
                                 ),
                               ),
                             ),
-                            title: Text(artistes[index].name,
+                            title: Text(currentArtist.name,
                                 style: TextStyle(
-                                    color: Theme.of(context).secondaryHeaderColor,
+                                    color:
+                                        Theme.of(context).secondaryHeaderColor,
                                     fontWeight: FontWeight.bold)),
                             trailing: Icon(Icons.keyboard_arrow_right,
                                 color: Theme.of(context).secondaryHeaderColor),
                             onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => GuessSongPage()));
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => GuessSongPage(
+                                        artist: currentArtist,
+                                      )));
                             },
                             subtitle: Row(
                               children: <Widget>[
