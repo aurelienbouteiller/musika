@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:musika/ApiDeezer.dart';
 import 'package:musika/SelectArtistPage.dart';
+import 'package:musika/SelectLevelPage.dart';
 import 'package:musika/widget/ArtistWidget.dart';
 import 'package:musika/widget/ChoiceWidget.dart';
 import 'package:musika/widget/MusicManager.dart';
@@ -20,8 +21,12 @@ void main() => runApp(MusikaApp());
 class MusikaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+
     return new MaterialApp(
-      home: new GuessSongPage(),
+      home: new SelectLevelPage(),
       theme: new ThemeData(
           brightness: Brightness.light,
           primaryColor: Color(0xFFfdcb6e),
@@ -64,9 +69,6 @@ class _GuessSongPageState extends State<GuessSongPage> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
 
     selectedTracks = List<Track>();
     audioPlayer = AudioPlayer();
