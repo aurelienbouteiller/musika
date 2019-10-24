@@ -82,9 +82,12 @@ class _GuessSongPageState extends State<GuessSongPage> {
   }
 
   onAudioChangePlaying(AudioPlayerState playerEvent) {
-    setState(() {
-      audioPlaying = playerEvent == AudioPlayerState.PLAYING;
-    });
+    if (this.mounted)
+      {
+        setState(() {
+          audioPlaying = playerEvent == AudioPlayerState.PLAYING;
+        });
+      }
   }
 
   selectFourSongsOfTheArtist(int artistId) async {
