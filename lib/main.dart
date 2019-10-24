@@ -164,75 +164,74 @@ class _GuessSongPageState extends State<GuessSongPage> {
     final FlareControls _controls = FlareControls();
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Choix de la musique"),
-        ),
-        body: loadingTrack
-            ? Center(child: CircularProgressIndicator())
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                    Expanded(
-                      flex: 2,
-                      child: Stack(
-                        alignment: Alignment.topCenter,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Card(
-                              elevation: 5,
-                              color: Theme.of(context).primaryColor,
-                              child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                child: Container(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Expanded(
-                                        flex: 1,
-                                        child: FlareActor(
-                                          "assets/gramophone.flr",
-                                          alignment: Alignment.center,
-                                          animation: "run",
-                                          controller: _controls,
-                                          isPaused: !audioPlaying,
+        body: SafeArea(
+          child: loadingTrack
+              ? Center(child: CircularProgressIndicator())
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Stack(
+                          alignment: Alignment.topCenter,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Card(
+                                elevation: 5,
+                                color: Theme.of(context).primaryColor,
+                                child: ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  child: Container(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Expanded(
+                                          flex: 1,
+                                          child: FlareActor(
+                                            "assets/gramophone.flr",
+                                            alignment: Alignment.center,
+                                            animation: "run",
+                                            controller: _controls,
+                                            isPaused: !audioPlaying,
+                                          ),
                                         ),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: MusicManager(
-                                          onPress: onPlayButtonPress,
-                                          audioPlaying: audioPlaying &&
-                                              audioPlayerPosition > 0,
-                                          answered: answered,
+                                        Expanded(
+                                          flex: 1,
+                                          child: MusicManager(
+                                            onPress: onPlayButtonPress,
+                                            audioPlaying: audioPlaying &&
+                                                audioPlayerPosition > 0,
+                                            answered: answered,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          ArtistWidget(
-                            artistName: selectedTrack?.artist?.name,
-                            imageUrl:
-                                "https://e-cdns-images.dzcdn.net/images/artist/640e021fabe66e4f866a18d3c1406689/500x500-000000-80-0-0.jpg",
-                          ),
-                        ],
+                            ArtistWidget(
+                              artistName: selectedTrack?.artist?.name,
+                              imageUrl:
+                                  "https://e-cdns-images.dzcdn.net/images/artist/640e021fabe66e4f866a18d3c1406689/500x500-000000-80-0-0.jpg",
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: ChoiceWidget(
-                          titles: selectedTracksTitles,
-                          selectedTitleIndex: selectedTitleIndex,
-                          chosenTitleIndex: chosenTitleIndex,
-                          onPress: onChoicePress,
-                          answered: answered,
-                          disabled: !audioPlaying && !answered),
-                    )
-                  ]));
+                      Expanded(
+                        flex: 1,
+                        child: ChoiceWidget(
+                            titles: selectedTracksTitles,
+                            selectedTitleIndex: selectedTitleIndex,
+                            chosenTitleIndex: chosenTitleIndex,
+                            onPress: onChoicePress,
+                            answered: answered,
+                            disabled: !audioPlaying && !answered),
+                      )
+                    ]),
+        ));
   }
 
   @override
