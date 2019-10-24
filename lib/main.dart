@@ -7,8 +7,8 @@ import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:musika/ApiDeezer.dart';
-import 'package:musika/SelectArtistPage.dart';
 import 'package:musika/SelectLevelPage.dart';
+import 'package:musika/model/Artist.dart';
 import 'package:musika/widget/ArtistWidget.dart';
 import 'package:musika/widget/ChoiceWidget.dart';
 import 'package:musika/widget/MusicManager.dart';
@@ -47,9 +47,9 @@ class MusikaApp extends StatelessWidget {
 }
 
 class GuessSongPage extends StatefulWidget {
-  GuessSongPage({Key key, this.title}) : super(key: key);
+  final Artist artist;
 
-  final String title;
+  GuessSongPage({Key key, this.artist}) : super(key: key);
 
   @override
   _GuessSongPageState createState() => _GuessSongPageState();
@@ -79,17 +79,16 @@ class _GuessSongPageState extends State<GuessSongPage> {
     audioPlayer.onAudioPositionChanged.listen((position) => setState(() {
           audioPlayerPosition = position.inMilliseconds;
         }));
-    selectFourSongsOfTheArtist(259467);
+    selectFourSongsOfTheArtist(widget.artist.id);
   }
 
   onAudioChangePlaying(AudioPlayerState playerEvent) {
-    if (this.mounted)
-      {
-        setState(() {
-          isDisable = true;
-          audioPlaying = playerEvent == AudioPlayerState.PLAYING;
-        });
-      }
+    if (this.mounted) {
+      setState(() {
+        isDisable = true;
+        audioPlaying = playerEvent == AudioPlayerState.PLAYING;
+      });
+    }
   }
 
   selectFourSongsOfTheArtist(int artistId) async {
@@ -170,73 +169,73 @@ class _GuessSongPageState extends State<GuessSongPage> {
 
     return Scaffold(
         body: SafeArea(
-          child: loadingTrack
-              ? Center(child: CircularProgressIndicator())
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                      Expanded(
-                        flex: 2,
-                        child: Stack(
-                          alignment: Alignment.topCenter,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Card(
-                                elevation: 5,
-                                color: Theme.of(context).primaryColor,
-                                child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
-                                  child: Container(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Expanded(
-                                          flex: 1,
-                                          child: FlareActor(
-                                            "assets/gramophone.flr",
-                                            alignment: Alignment.center,
-                                            animation: "run",
-                                            controller: _controls,
-                                            isPaused: !audioPlaying,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: MusicManager(
-                                            onPress: onPlayButtonPress,
-                                            audioPlaying: audioPlaying &&
-                                                audioPlayerPosition > 0,
-                                            isDisable: isDisable,
-                                          ),
-                                        ),
-                                      ],
+      child: loadingTrack
+          ? Center(child: CircularProgressIndicator())
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                  Expanded(
+                    flex: 2,
+                    child: Stack(
+                      alignment: Alignment.topCenter,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Card(
+                            elevation: 5,
+                            color: Theme.of(context).primaryColor,
+                            child: ClipRRect(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              child: Container(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Expanded(
+                                      flex: 1,
+                                      child: FlareActor(
+                                        "assets/gramophone.flr",
+                                        alignment: Alignment.center,
+                                        animation: "run",
+                                        controller: _controls,
+                                        isPaused: !audioPlaying,
+                                      ),
                                     ),
-                                  ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: MusicManager(
+                                        onPress: onPlayButtonPress,
+                                        audioPlaying: audioPlaying &&
+                                            audioPlayerPosition > 0,
+                                        isDisable: isDisable,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                            ArtistWidget(
-                              artistName: selectedTrack?.artist?.name,
-                              imageUrl:
-                                  "https://e-cdns-images.dzcdn.net/images/artist/640e021fabe66e4f866a18d3c1406689/500x500-000000-80-0-0.jpg",
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: ChoiceWidget(
-                            titles: selectedTracksTitles,
-                            selectedTitleIndex: selectedTitleIndex,
-                            chosenTitleIndex: chosenTitleIndex,
-                            onPress: onChoicePress,
-                            answered: answered,
-                            disabled: !audioPlaying && !answered),
-                      )
-                    ]),
-        ));
+                        ArtistWidget(
+                          artistName: selectedTrack?.artist?.name,
+                          imageUrl:
+                              "https://api.deezer.com/artist/${widget.artist.id}/image",
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: ChoiceWidget(
+                        titles: selectedTracksTitles,
+                        selectedTitleIndex: selectedTitleIndex,
+                        chosenTitleIndex: chosenTitleIndex,
+                        onPress: onChoicePress,
+                        answered: answered,
+                        disabled: !audioPlaying && !answered),
+                  )
+                ]),
+    ));
   }
 
   @override
