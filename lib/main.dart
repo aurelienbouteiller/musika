@@ -62,6 +62,7 @@ class _GuessSongPageState extends State<GuessSongPage> {
   AudioPlayer audioPlayer;
   bool answered = false;
   bool audioPlaying = false;
+  bool isDisable = false;
   List<String> selectedTracksTitles;
   int selectedTitleIndex;
   int chosenTitleIndex;
@@ -85,6 +86,7 @@ class _GuessSongPageState extends State<GuessSongPage> {
     if (this.mounted)
       {
         setState(() {
+          isDisable = true;
           audioPlaying = playerEvent == AudioPlayerState.PLAYING;
         });
       }
@@ -206,7 +208,7 @@ class _GuessSongPageState extends State<GuessSongPage> {
                                             onPress: onPlayButtonPress,
                                             audioPlaying: audioPlaying &&
                                                 audioPlayerPosition > 0,
-                                            answered: answered,
+                                            isDisable: isDisable,
                                           ),
                                         ),
                                       ],

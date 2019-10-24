@@ -5,13 +5,13 @@ import 'ColorfulProgressBar.dart';
 class MusicManager extends StatefulWidget {
   final bool audioPlaying;
   final Function onPress;
-  final bool answered;
+  final bool isDisable;
 
   MusicManager(
       {Key key,
       @required this.onPress,
       @required this.audioPlaying,
-      @required this.answered})
+      @required this.isDisable,})
       : super(key: key);
 
   @override
@@ -44,7 +44,7 @@ class _MusicManagerState extends State<MusicManager> {
           ],
           backgroundColor: Colors.transparent,
         ),
-        widget.audioPlaying || widget.answered
+        widget.audioPlaying || widget.isDisable
             ? Container()
             : FlatButton(
                 onPressed: onPress,
