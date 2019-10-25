@@ -15,6 +15,7 @@ dependencies:
   audioplayers: ^0.13.2
   http: 0.12.0+2
   flare_flutter: ^1.6.1
+  flutter_launcher_icons: ^0.7.0
 
 dev_dependencies:
   flutter_test:
@@ -26,3 +27,11 @@ flutter:
     - assets/gramophone.flr
     - assets/succes-check.flr
     - assets/error-check.flr
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: assets/logo.png
+  image_path_android: assets/logo.png
+  adaptive_icon_background: assets/logo_background.png
+  adaptive_icon_foreground: assets/logo_foreground.png
