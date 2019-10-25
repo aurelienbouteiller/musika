@@ -33,3 +33,5 @@ flutter_icons:
   android: true
   image_path_ios: assets/logo.png
   image_path_android: assets/logo.png
+  adaptive_icon_background: assets/logo_background.png
+  adaptive_icon_foreground: assets/logo_foreground.png
