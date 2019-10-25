@@ -1,13 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:musika/style/theme.dart' as Theme;
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:musika/widget/bubble_indication_painter.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:musika/SelectLevelPage.dart';
+import 'package:musika/style/theme.dart' as Theme;
+import 'package:musika/widget/bubble_indication_painter.dart';
 
 class AuthentificationPage extends StatefulWidget {
   AuthentificationPage({Key key}) : super(key: key);
@@ -45,7 +43,6 @@ class _AuthentificationPage extends State<AuthentificationPage>
   Color left = Colors.black;
   Color right = Colors.white;
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _containerKey = GlobalKey<FormState>();
@@ -321,8 +318,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
                   LayoutBuilder(
                     builder: (context, constraints) {
                       return Container(
-                        margin: EdgeInsets.only(
-                            top: 170),
+                        margin: EdgeInsets.only(top: 170),
                         decoration: new BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(5.0)),
                           boxShadow: <BoxShadow>[
