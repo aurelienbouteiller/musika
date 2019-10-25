@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:musika/SelectLevelPage.dart';
 import 'package:musika/style/theme.dart' as Theme;
@@ -721,7 +722,8 @@ class _AuthentificationPage extends State<AuthentificationPage>
     try {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
       FacebookLogin facebookLogin = FacebookLogin();
-      FacebookLoginResult result = await facebookLogin.logIn(['email', 'public_profile']);
+      FacebookLoginResult result =
+          await facebookLogin.logIn(['email', 'public_profile']);
       switch (result.status) {
         case FacebookLoginStatus.loggedIn:
           Navigator.push(context,
