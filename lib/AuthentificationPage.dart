@@ -718,15 +718,10 @@ class _AuthentificationPage extends State<AuthentificationPage>
   }
 
   void _signInFacebook() async {
-    print('facebook');
     try {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
       FacebookLogin facebookLogin = FacebookLogin();
       FacebookLoginResult result = await facebookLogin.logIn(['email', 'public_profile']);
-      print(result.status);
-      print(result.accessToken);
-      print(result.hashCode);
-      print(result.errorMessage);
       switch (result.status) {
         case FacebookLoginStatus.loggedIn:
           Navigator.push(context,
