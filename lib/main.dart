@@ -13,6 +13,7 @@ import 'package:musika/widget/ArtistWidget.dart';
 import 'package:musika/widget/ChoiceWidget.dart';
 import 'package:musika/widget/MusicManager.dart';
 import 'package:musika/widget/ScoreWidget.dart';
+import 'package:musika/AuthentificationPage.dart';
 
 import 'model/Track.dart';
 
@@ -26,7 +27,7 @@ class MusikaApp extends StatelessWidget {
     ]);
 
     return new MaterialApp(
-      home: new SelectLevelPage(),
+      home: new AuthentificationPage(),
       theme: new ThemeData(
           brightness: Brightness.light,
           primaryColor: Color(0xFFfdcb6e),
