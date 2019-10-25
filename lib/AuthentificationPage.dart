@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:musika/widget/bubble_indication_painter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:musika/SelectLevelPage.dart';
 
 class AuthentificationPage extends StatefulWidget {
   AuthentificationPage({Key key}) : super(key: key);
@@ -45,6 +46,8 @@ class _AuthentificationPage extends State<AuthentificationPage>
 
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String _email, _password;
 
   @override
   Widget build(BuildContext context) {
@@ -224,7 +227,12 @@ class _AuthentificationPage extends State<AuthentificationPage>
                       Padding(
                         padding: EdgeInsets.only(
                             top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-                        child: TextField(
+                        child: TextFormField(
+                          validator: (input) {
+                            if(input.isEmpty){
+                              return 'Provide an email';
+                            }
+                          },
                           focusNode: myFocusNodeEmailLogin,
                           controller: loginEmailController,
                           keyboardType: TextInputType.emailAddress,
@@ -232,7 +240,9 @@ class _AuthentificationPage extends State<AuthentificationPage>
                               fontFamily: "WorkSansSemiBold",
                               fontSize: 16.0,
                               color: Colors.black),
+                          onSaved: (input) => _email = input,
                           decoration: InputDecoration(
+                            labelText: 'Email',
                             border: InputBorder.none,
                             icon: Icon(
                               FontAwesomeIcons.envelope,
@@ -253,7 +263,12 @@ class _AuthentificationPage extends State<AuthentificationPage>
                       Padding(
                         padding: EdgeInsets.only(
                             top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-                        child: TextField(
+                        child: TextFormField(
+                          validator: (input) {
+                            if(input.length < 6){
+                              return 'Longer password please';
+                            }
+                          },
                           focusNode: myFocusNodePasswordLogin,
                           controller: loginPasswordController,
                           obscureText: _obscureTextLogin,
@@ -261,7 +276,9 @@ class _AuthentificationPage extends State<AuthentificationPage>
                               fontFamily: "WorkSansSemiBold",
                               fontSize: 16.0,
                               color: Colors.black),
+                          onSaved: (input) => _password = input,
                           decoration: InputDecoration(
+                            labelText: 'Password',
                             border: InputBorder.none,
                             icon: Icon(
                               FontAwesomeIcons.lock,
@@ -329,9 +346,9 @@ class _AuthentificationPage extends State<AuthentificationPage>
                             fontFamily: "WorkSansBold"),
                       ),
                     ),
-                    onPressed: () =>
-                        showInSnackBar("Login button pressed")),
-              ),
+                    onPressed: () => _signInEmail(),
+                ),
+              )
             ],
           ),
           Padding(
@@ -667,5 +684,17 @@ class _AuthentificationPage extends State<AuthentificationPage>
     setState(() {
       _obscureTextSignupConfirm = !_obscureTextSignupConfirm;
     });
+  }
+  void _signInEmail() async {
+    final _formState = _formKey.currentState;
+    if(_formState.validate()){
+      _formState.save();
+      try{
+        FirebaseUser  user = (await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password)).user;
+        Navigator.push(context, MaterialPageRoute(builder: (context) => SelectLevelPage()));
+      }catch(e){
+        print(e.message);
+      }
+    }
   }
 }

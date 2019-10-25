@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "611887682338",
+    "firebase_url": "https://musika-ynov.firebaseio.com",
+    "project_id": "musika-ynov",
+    "storage_bucket": "musika-ynov.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:611887682338:android:2d5e716ea34255e2bb8b7b",
+        "android_client_info": {
+          "package_name": "dev.auvidapi.ynov.musika"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "611887682338-pmupafbpb9e03mn01dh3n6gd86rt417g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLazr0yerFd4kpQ_mI_JhrhP7sVD8exUs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "611887682338-pmupafbpb9e03mn01dh3n6gd86rt417g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
