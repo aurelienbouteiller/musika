@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:musika/SelectLevelPage.dart';
 import 'package:musika/style/theme.dart' as Theme;
@@ -434,7 +435,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
               Padding(
                 padding: EdgeInsets.only(top: 10.0, right: 40.0),
                 child: GestureDetector(
-                  onTap: () => showInSnackBar("Facebook button pressed"),
+                  onTap: () => _signInFacebook(),
                   child: Container(
                     padding: const EdgeInsets.all(15.0),
                     decoration: new BoxDecoration(
@@ -714,6 +715,29 @@ class _AuthentificationPage extends State<AuthentificationPage>
       } catch (e) {
         print(e.message);
       }
+    }
+  }
+
+  void _signInFacebook() async {
+    try {
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+      FacebookLogin facebookLogin = FacebookLogin();
+      FacebookLoginResult result =
+          await facebookLogin.logIn(['email', 'public_profile']);
+      switch (result.status) {
+        case FacebookLoginStatus.loggedIn:
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => SelectLevelPage()));
+          break;
+        case FacebookLoginStatus.cancelledByUser:
+          showInSnackBar("Connection cancelled");
+          break;
+        case FacebookLoginStatus.error:
+          showInSnackBar(result.errorMessage);
+          break;
+      }
+    } catch (e) {
+      print("Error in facebook sign in: $e");
     }
   }
 }
