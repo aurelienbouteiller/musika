@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:musika/SelectLevelPage.dart';
 import 'package:musika/style/theme.dart' as Theme;
 import 'package:musika/widget/bubble_indication_painter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthentificationPage extends StatefulWidget {
   AuthentificationPage({Key key}) : super(key: key);
@@ -47,6 +48,12 @@ class _AuthentificationPage extends State<AuthentificationPage>
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _containerKey = GlobalKey<FormState>();
+  GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+      'https://www.googleapis.com/auth/contacts.readonly',
+    ],
+  );
   String _email, _password;
 
   @override
@@ -452,7 +459,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
               Padding(
                 padding: EdgeInsets.only(top: 10.0),
                 child: GestureDetector(
-                  onTap: () => showInSnackBar("Google button pressed"),
+                  onTap: () => _signInGoogle(),
                   child: Container(
                     padding: const EdgeInsets.all(15.0),
                     decoration: new BoxDecoration(
@@ -738,6 +745,15 @@ class _AuthentificationPage extends State<AuthentificationPage>
       }
     } catch (e) {
       print("Error in facebook sign in: $e");
+    }
+  }
+  void _signInGoogle()async{
+    try{
+      await _googleSignIn.signIn();
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => SelectLevelPage()));
+    }catch(e){
+      print(e);
     }
   }
 }
