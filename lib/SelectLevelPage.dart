@@ -78,6 +78,7 @@ class _SelectLevelPageState extends State<SelectLevelPage> {
   navigateToArtistPage(BuildContext context, Level level) {
     Navigator.of(context).push(
       PageRouteBuilder<SelectArtistPage>(
+        transitionDuration: Duration(milliseconds: 600),
         pageBuilder: (
           BuildContext context,
           Animation<double> animation,
@@ -100,10 +101,24 @@ class _SelectLevelPageState extends State<SelectLevelPage> {
     );
   }
 
+  Widget _flightShuttleBuilder(
+    BuildContext flightContext,
+    Animation<double> animation,
+    HeroFlightDirection flightDirection,
+    BuildContext fromHeroContext,
+    BuildContext toHeroContext,
+  ) {
+    return DefaultTextStyle(
+      style: DefaultTextStyle.of(toHeroContext).style,
+      child: toHeroContext.widget,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          actions: <Widget>[],
           title: Text("Sélection du niveau",
               style: TextStyle(color: Theme.of(context).accentColor)),
           backgroundColor: Theme.of(context).backgroundColor,
@@ -117,6 +132,7 @@ class _SelectLevelPageState extends State<SelectLevelPage> {
 
               return Hero(
                 tag: levelId,
+                flightShuttleBuilder: _flightShuttleBuilder,
                 child: Card(
                   elevation: 4.5,
                   color: Colors.transparent,
@@ -132,7 +148,8 @@ class _SelectLevelPageState extends State<SelectLevelPage> {
                         title: Text("Niveau $levelId",
                             style: TextStyle(
                                 color: Theme.of(context).secondaryHeaderColor,
-                                fontWeight: FontWeight.bold)),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15)),
                         trailing: Icon(Icons.keyboard_arrow_right,
                             color: Theme.of(context).secondaryHeaderColor),
                         onTap: () {

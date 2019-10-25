@@ -28,23 +28,19 @@ class _SelectArtistPageState extends State<SelectArtistPage> {
           children: <Widget>[
             Hero(
               tag: widget.level.id,
-              child: SizedBox(
-                width: double.infinity,
-                height: 125.0,
-                child: Card(
-                  elevation: 4.5,
-                  color: Colors.transparent,
-                  margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5.0),
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 8.0),
-                          child: Text("Niveau ${widget.level.id}"),
-                        )),
+              child: Container(
+                width: 300,
+                height: 100,
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    shape: BoxShape.circle),
+                child: Center(
+                  child: Text(
+                    "Niveau ${widget.level.id}",
+                    style: TextStyle(
+                        color: Theme.of(context).secondaryHeaderColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15),
                   ),
                 ),
               ),
