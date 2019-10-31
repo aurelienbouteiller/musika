@@ -27,6 +27,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  test: ^1.6.2
+  flutter_driver:
+    sdk: flutter
 
 flutter:
   uses-material-design: true

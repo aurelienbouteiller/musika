@@ -361,6 +361,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
                                 vertical: 10.0, horizontal: 42.0),
                             child: Text(
                               "LOGIN",
+                              key: Key('login'),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 25.0,
