@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:musika/main.dart';
 
 import 'Level.dart';
+import 'StatsPage.dart';
 import 'model/Artist.dart';
 
 class SelectArtistPage extends StatefulWidget {
@@ -19,6 +20,18 @@ class _SelectArtistPageState extends State<SelectArtistPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.account_circle),
+              color: Colors.blue,
+              iconSize: 40,
+              tooltip: 'Show Snackbar',
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => StatsPage()));
+              },
+            ),
+          ],
           title: Text("Sélection de l'artiste",
               style: TextStyle(color: Theme.of(context).accentColor)),
           backgroundColor: Theme.of(context).backgroundColor,
