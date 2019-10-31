@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:musika/SelectArtistPage.dart';
+import 'package:musika/StatsPage.dart';
 import 'package:musika/model/Artist.dart';
 
 import 'Level.dart';
@@ -118,7 +119,18 @@ class _SelectLevelPageState extends State<SelectLevelPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          actions: <Widget>[],
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.account_circle),
+              color: Colors.blue,
+              iconSize: 40,
+              tooltip: 'Show Snackbar',
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => StatsPage()));
+              },
+            ),
+          ],
           title: Text("Sélection du niveau",
               style: TextStyle(color: Theme.of(context).accentColor)),
           backgroundColor: Theme.of(context).backgroundColor,
