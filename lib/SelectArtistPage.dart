@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:musika/main.dart';
 
-import 'Level.dart';
 import 'model/Artist.dart';
+import 'model/Levels.dart';
 
 class SelectArtistPage extends StatefulWidget {
   SelectArtistPage({Key key, this.level}) : super(key: key);
