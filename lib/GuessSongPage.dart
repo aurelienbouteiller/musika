@@ -36,6 +36,7 @@ class _GuessSongPageState extends State<GuessSongPage> {
   int selectedTitleIndex;
   int chosenTitleIndex;
   int audioPlayerPosition;
+  bool isFinish = false;
 
   @override
   void initState() {
@@ -56,6 +57,7 @@ class _GuessSongPageState extends State<GuessSongPage> {
       setState(() {
         isDisable = true;
         audioPlaying = playerEvent == AudioPlayerState.PLAYING;
+        isFinish = playerEvent == AudioPlayerState.STOPPED || playerEvent == AudioPlayerState.COMPLETED;
       });
     }
   }
@@ -132,6 +134,14 @@ class _GuessSongPageState extends State<GuessSongPage> {
     audioPlayer.play(selectedTrack?.preview);
   }
 
+  onReplayPress(){
+    answered = false;
+    audioPlaying = false;
+    isDisable = false;
+    isFinish = false;
+    selectFourSongsOfTheArtist(widget.artist.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     final FlareControls _controls = FlareControls();
@@ -177,6 +187,8 @@ class _GuessSongPageState extends State<GuessSongPage> {
                                         audioPlaying: audioPlaying &&
                                             audioPlayerPosition > 0,
                                         isDisable: isDisable,
+                                        isFinish: isFinish,
+                                        onReloadPress: onReplayPress,
                                       ),
                                     ),
                                   ],

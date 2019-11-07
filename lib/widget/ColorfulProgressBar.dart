@@ -9,6 +9,7 @@ class ColorfulProgressBar extends StatefulWidget {
   List<MaterialColor> fillColor;
   final Duration animationDuration;
   final bool animating;
+  final bool isFinish;
 
   ColorfulProgressBar({
     Key key,
@@ -18,6 +19,7 @@ class ColorfulProgressBar extends StatefulWidget {
     this.fillColor,
     @required this.height,
     @required this.width,
+    @required this.isFinish,
   }) : super(key: key);
 
   @override
@@ -69,7 +71,7 @@ class _ColorfulProgressBarState extends State<ColorfulProgressBar>
     final height = this.widget.height;
     final backgroundColor = this.widget.backgroundColor;
 
-    return !init
+    return !init && !widget.isFinish
         ? Column(
             children: <Widget>[
               Container(
