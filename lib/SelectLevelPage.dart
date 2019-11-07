@@ -138,8 +138,10 @@ class _SelectLevelPageState extends State<SelectLevelPage> {
               tooltip: 'Profil',
               onPressed: () {
                 if (widget.user.isConnected) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => StatsPage()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => StatsPage(user: widget.user)));
                 }
               },
             ),

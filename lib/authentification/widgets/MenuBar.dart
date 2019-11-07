@@ -20,11 +20,13 @@ class MenuBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColor = Theme.of(context).primaryColor;
+
     return Container(
       width: 300.0,
       height: 50.0,
       decoration: BoxDecoration(
-        color: Color(0x552B2B2B),
+        color: primaryColor,
         borderRadius: BorderRadius.all(Radius.circular(25.0)),
       ),
       child: CustomPaint(
@@ -38,7 +40,7 @@ class MenuBar extends StatelessWidget {
                 highlightColor: Colors.transparent,
                 onPressed: _onSignInButtonPress,
                 child: Text(
-                  "Existing",
+                  "Connexion",
                   style: TextStyle(
                       color: leftColor,
                       fontSize: 16.0,
@@ -53,7 +55,7 @@ class MenuBar extends StatelessWidget {
                 highlightColor: Colors.transparent,
                 onPressed: _onSignUpButtonPress,
                 child: Text(
-                  "New",
+                  "Inscription",
                   style: TextStyle(
                       color: rightColor,
                       fontSize: 16.0,
