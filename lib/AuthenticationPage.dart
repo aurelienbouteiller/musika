@@ -9,16 +9,18 @@ import 'package:musika/SelectLevelPage.dart';
 import 'package:musika/style/theme.dart' as Theme;
 import 'package:musika/widget/bubble_indication_painter.dart';
 
-class AuthentificationPage extends StatefulWidget {
-  AuthentificationPage({Key key}) : super(key: key);
+import 'model/User.dart';
+
+class AuthenticationPage extends StatefulWidget {
+  AuthenticationPage({Key key}) : super(key: key);
 
   @override
-  _AuthentificationPage createState() => _AuthentificationPage();
+  _AuthenticationPage createState() => _AuthenticationPage();
 }
 
-class _AuthentificationPage extends State<AuthentificationPage>
+class _AuthenticationPage extends State<AuthenticationPage>
     with SingleTickerProviderStateMixin {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final FocusNode myFocusNodeEmailLogin = FocusNode();
   final FocusNode myFocusNodePasswordLogin = FocusNode();
@@ -27,25 +29,26 @@ class _AuthentificationPage extends State<AuthentificationPage>
   final FocusNode myFocusNodeEmail = FocusNode();
   final FocusNode myFocusNodeName = FocusNode();
 
-  TextEditingController loginEmailController = new TextEditingController();
-  TextEditingController loginPasswordController = new TextEditingController();
+  TextEditingController loginEmailController = TextEditingController();
+  TextEditingController loginPasswordController = TextEditingController();
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   bool _obscureTextLogin = true;
   bool _obscureTextSignup = true;
   bool _obscureTextSignupConfirm = true;
 
-  TextEditingController signupEmailController = new TextEditingController();
-  TextEditingController signupNameController = new TextEditingController();
-  TextEditingController signupPasswordController = new TextEditingController();
+  TextEditingController signupEmailController = TextEditingController();
+  TextEditingController signupNameController = TextEditingController();
+  TextEditingController signupPasswordController = TextEditingController();
   TextEditingController signupConfirmPasswordController =
-      new TextEditingController();
+      TextEditingController();
 
   PageController _pageController;
 
   Color left = Colors.black;
   Color right = Colors.white;
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _containerKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKeySignUp = GlobalKey<FormState>();
@@ -55,11 +58,11 @@ class _AuthentificationPage extends State<AuthentificationPage>
       'email',
     ],
   );
-  String _email, _password,_emailSignUp, _passwordSignUp,_nameSignUp;
+  String _email, _password, _emailSignUp, _passwordSignUp, _nameSignUp;
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       key: _scaffoldKey,
       body: NotificationListener<OverscrollIndicatorNotification>(
         onNotification: (overscroll) {
@@ -71,14 +74,13 @@ class _AuthentificationPage extends State<AuthentificationPage>
             height: MediaQuery.of(context).size.height >= 775.0
                 ? MediaQuery.of(context).size.height
                 : 775.0,
-            decoration: new BoxDecoration(
-              gradient: new LinearGradient(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
                   colors: [
                     Theme.Colors.loginGradientStart,
                     Theme.Colors.loginGradientEnd
                   ],
                   begin: const FractionalOffset(0.0, 0.0),
-                  end: const FractionalOffset(1.0, 1.0),
                   stops: [0.0, 1.0],
                   tileMode: TileMode.clamp),
             ),
@@ -107,12 +109,12 @@ class _AuthentificationPage extends State<AuthentificationPage>
                       }
                     },
                     children: <Widget>[
-                      new ConstrainedBox(
-                        constraints: const BoxConstraints.expand(),
+                      ConstrainedBox(
+                        constraints: BoxConstraints.expand(),
                         child: _buildSignIn(context),
                       ),
-                      new ConstrainedBox(
-                        constraints: const BoxConstraints.expand(),
+                      ConstrainedBox(
+                        constraints: BoxConstraints.expand(),
                         child: _buildSignUp(context),
                       ),
                     ],
@@ -148,10 +150,10 @@ class _AuthentificationPage extends State<AuthentificationPage>
   }
 
   void showInSnackBar(String value) {
-    FocusScope.of(context).requestFocus(new FocusNode());
+    FocusScope.of(context).requestFocus(FocusNode());
     _scaffoldKey.currentState?.removeCurrentSnackBar();
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      content: new Text(
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(
         value,
         textAlign: TextAlign.center,
         style: TextStyle(
@@ -183,7 +185,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
                 highlightColor: Colors.transparent,
                 onPressed: _onSignInButtonPress,
                 child: Text(
-                  "Existing",
+                  "Connexion",
                   style: TextStyle(
                       color: left,
                       fontSize: 16.0,
@@ -198,7 +200,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
                 highlightColor: Colors.transparent,
                 onPressed: _onSignUpButtonPress,
                 child: Text(
-                  "New",
+                  "Inscription",
                   style: TextStyle(
                       color: right,
                       fontSize: 16.0,
@@ -218,9 +220,9 @@ class _AuthentificationPage extends State<AuthentificationPage>
       child: Column(
         children: <Widget>[
           Form(
-              key: _formKey,
-    child: Container(
-    key: _containerKey,
+            key: _formKey,
+            child: Container(
+              key: _containerKey,
               child: Stack(
                 alignment: Alignment.topCenter,
                 overflow: Overflow.visible,
@@ -244,7 +246,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
                             child: TextFormField(
                               validator: (input) {
                                 if (input.isEmpty) {
-                                  return 'Provide an email';
+                                  return 'Email manquant';
                                 }
                               },
                               focusNode: myFocusNodeEmailLogin,
@@ -263,7 +265,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
                                   color: Colors.black,
                                   size: 22.0,
                                 ),
-                                hintText: "Email Address",
+                                hintText: "Adresse email",
                                 hintStyle: TextStyle(
                                     fontFamily: "WorkSansSemiBold",
                                     fontSize: 17.0),
@@ -284,7 +286,8 @@ class _AuthentificationPage extends State<AuthentificationPage>
                             child: TextFormField(
                               validator: (input) {
                                 if (input.length < 6) {
-                                  return 'Longer password please';
+                                  return 'Le mot de passe n'
+                                      'est pas assez long';
                                 }
                               },
                               focusNode: myFocusNodePasswordLogin,
@@ -296,14 +299,14 @@ class _AuthentificationPage extends State<AuthentificationPage>
                                   color: Colors.black),
                               onSaved: (input) => _password = input,
                               decoration: InputDecoration(
-                                labelText: 'Password',
+                                labelText: 'Mot de passe',
                                 border: InputBorder.none,
                                 icon: Icon(
                                   FontAwesomeIcons.lock,
                                   size: 22.0,
                                   color: Colors.black,
                                 ),
-                                hintText: "Password",
+                                hintText: "Mot de passe",
                                 hintStyle: TextStyle(
                                     fontFamily: "WorkSansSemiBold",
                                     fontSize: 17.0),
@@ -328,7 +331,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
                     builder: (context, constraints) {
                       return Container(
                         margin: EdgeInsets.only(top: 170),
-                        decoration: new BoxDecoration(
+                        decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(5.0)),
                           boxShadow: <BoxShadow>[
                             BoxShadow(
@@ -342,7 +345,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
                               blurRadius: 20.0,
                             ),
                           ],
-                          gradient: new LinearGradient(
+                          gradient: LinearGradient(
                               colors: [
                                 Theme.Colors.loginGradientEnd,
                                 Theme.Colors.loginGradientStart
@@ -360,7 +363,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
                             padding: const EdgeInsets.symmetric(
                                 vertical: 10.0, horizontal: 42.0),
                             child: Text(
-                              "LOGIN",
+                              "CONNEXION",
                               key: Key('login'),
                               style: TextStyle(
                                   color: Colors.white,
@@ -382,7 +385,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
             child: FlatButton(
                 onPressed: () {},
                 child: Text(
-                  "Forgot Password?",
+                  "Mot de passe oublié?",
                   style: TextStyle(
                       decoration: TextDecoration.underline,
                       color: Colors.white,
@@ -397,7 +400,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
-                    gradient: new LinearGradient(
+                    gradient: LinearGradient(
                         colors: [
                           Colors.white10,
                           Colors.white,
@@ -413,7 +416,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
                 Padding(
                   padding: EdgeInsets.only(left: 15.0, right: 15.0),
                   child: Text(
-                    "Or",
+                    "OU",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16.0,
@@ -422,7 +425,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
                 ),
                 Container(
                   decoration: BoxDecoration(
-                    gradient: new LinearGradient(
+                    gradient: LinearGradient(
                         colors: [
                           Colors.white,
                           Colors.white10,
@@ -447,11 +450,11 @@ class _AuthentificationPage extends State<AuthentificationPage>
                   onTap: () => _signInFacebook(),
                   child: Container(
                     padding: const EdgeInsets.all(15.0),
-                    decoration: new BoxDecoration(
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white,
                     ),
-                    child: new Icon(
+                    child: Icon(
                       FontAwesomeIcons.facebookF,
                       color: Color(0xFF0084ff),
                     ),
@@ -464,11 +467,11 @@ class _AuthentificationPage extends State<AuthentificationPage>
                   onTap: () => _signInGoogle(),
                   child: Container(
                     padding: const EdgeInsets.all(15.0),
-                    decoration: new BoxDecoration(
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white,
                     ),
-                    child: new Icon(
+                    child: Icon(
                       FontAwesomeIcons.google,
                       color: Color(0xFF0084ff),
                     ),
@@ -487,11 +490,11 @@ class _AuthentificationPage extends State<AuthentificationPage>
       padding: EdgeInsets.only(top: 23.0),
       child: Column(
         children: <Widget>[
-        Form(
-          key: _formKeySignUp,
-          child: Container(
-            key: _containerKeySignUp,
-            child:  Stack(
+          Form(
+            key: _formKeySignUp,
+            child: Container(
+              key: _containerKeySignUp,
+              child: Stack(
                 alignment: Alignment.topCenter,
                 overflow: Overflow.visible,
                 children: <Widget>[
@@ -508,7 +511,10 @@ class _AuthentificationPage extends State<AuthentificationPage>
                         children: <Widget>[
                           Padding(
                             padding: EdgeInsets.only(
-                                top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                                top: 20.0,
+                                bottom: 20.0,
+                                left: 25.0,
+                                right: 25.0),
                             child: TextFormField(
                               focusNode: myFocusNodeName,
                               controller: signupNameController,
@@ -524,9 +530,10 @@ class _AuthentificationPage extends State<AuthentificationPage>
                                   FontAwesomeIcons.user,
                                   color: Colors.black,
                                 ),
-                                hintText: "Name",
+                                hintText: "Nom",
                                 hintStyle: TextStyle(
-                                    fontFamily: "WorkSansSemiBold", fontSize: 16.0),
+                                    fontFamily: "WorkSansSemiBold",
+                                    fontSize: 16.0),
                               ),
                             ),
                           ),
@@ -537,11 +544,14 @@ class _AuthentificationPage extends State<AuthentificationPage>
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                                top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                                top: 20.0,
+                                bottom: 20.0,
+                                left: 25.0,
+                                right: 25.0),
                             child: TextFormField(
                               validator: (input) {
                                 if (input.isEmpty) {
-                                  return 'Provide an email';
+                                  return 'Email manquant';
                                 }
                               },
                               focusNode: myFocusNodeEmail,
@@ -558,9 +568,10 @@ class _AuthentificationPage extends State<AuthentificationPage>
                                   FontAwesomeIcons.envelope,
                                   color: Colors.black,
                                 ),
-                                hintText: "Email Address",
+                                hintText: "Adresse email",
                                 hintStyle: TextStyle(
-                                    fontFamily: "WorkSansSemiBold", fontSize: 16.0),
+                                    fontFamily: "WorkSansSemiBold",
+                                    fontSize: 16.0),
                               ),
                             ),
                           ),
@@ -571,11 +582,15 @@ class _AuthentificationPage extends State<AuthentificationPage>
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                                top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                                top: 20.0,
+                                bottom: 20.0,
+                                left: 25.0,
+                                right: 25.0),
                             child: TextFormField(
                               validator: (input) {
                                 if (input.length < 6) {
-                                  return 'Longer password please';
+                                  return 'Le mot de passe n'
+                                      'est pas assez long !';
                                 }
                               },
                               focusNode: myFocusNodePassword,
@@ -592,9 +607,10 @@ class _AuthentificationPage extends State<AuthentificationPage>
                                   FontAwesomeIcons.lock,
                                   color: Colors.black,
                                 ),
-                                hintText: "Password",
+                                hintText: "Mot de passe",
                                 hintStyle: TextStyle(
-                                    fontFamily: "WorkSansSemiBold", fontSize: 16.0),
+                                    fontFamily: "WorkSansSemiBold",
+                                    fontSize: 16.0),
                                 suffixIcon: GestureDetector(
                                   onTap: _toggleSignup,
                                   child: Icon(
@@ -615,7 +631,10 @@ class _AuthentificationPage extends State<AuthentificationPage>
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                                top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                                top: 20.0,
+                                bottom: 20.0,
+                                left: 25.0,
+                                right: 25.0),
                             child: TextFormField(
                               controller: signupConfirmPasswordController,
                               obscureText: _obscureTextSignupConfirm,
@@ -631,7 +650,8 @@ class _AuthentificationPage extends State<AuthentificationPage>
                                 ),
                                 hintText: "Confirmation",
                                 hintStyle: TextStyle(
-                                    fontFamily: "WorkSansSemiBold", fontSize: 16.0),
+                                    fontFamily: "WorkSansSemiBold",
+                                    fontSize: 16.0),
                                 suffixIcon: GestureDetector(
                                   onTap: _toggleSignupConfirm,
                                   child: Icon(
@@ -651,7 +671,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 340.0),
-                    decoration: new BoxDecoration(
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
@@ -665,7 +685,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
                           blurRadius: 20.0,
                         ),
                       ],
-                      gradient: new LinearGradient(
+                      gradient: LinearGradient(
                           colors: [
                             Theme.Colors.loginGradientEnd,
                             Theme.Colors.loginGradientStart
@@ -683,7 +703,7 @@ class _AuthentificationPage extends State<AuthentificationPage>
                           padding: const EdgeInsets.symmetric(
                               vertical: 10.0, horizontal: 42.0),
                           child: Text(
-                            "SIGN UP",
+                            "INSCRIPTION",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 25.0,
@@ -737,8 +757,12 @@ class _AuthentificationPage extends State<AuthentificationPage>
         FirebaseUser user = (await FirebaseAuth.instance
                 .signInWithEmailAndPassword(email: _email, password: _password))
             .user;
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => SelectLevelPage()));
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SelectLevelPage(
+                      user: User(isConnected: true),
+                    )));
       } catch (e) {
         print(e.message);
       }
@@ -753,8 +777,12 @@ class _AuthentificationPage extends State<AuthentificationPage>
           await facebookLogin.logIn(['email', 'public_profile']);
       switch (result.status) {
         case FacebookLoginStatus.loggedIn:
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => SelectLevelPage()));
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      SelectLevelPage(user: User(isConnected: true))),
+              (_) => false);
           break;
         case FacebookLoginStatus.cancelledByUser:
           showInSnackBar("Connection cancelled");
@@ -769,13 +797,13 @@ class _AuthentificationPage extends State<AuthentificationPage>
   }
 
   void _signInGoogle() async {
-    try {
-      await _googleSignIn.signIn();
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => SelectLevelPage()));
-    } catch (e) {
-      print(e);
-    }
+    await _googleSignIn.signIn().whenComplete(() =>
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    SelectLevelPage(user: User(isConnected: true))),
+            (_) => false));
   }
 
   void _signUp() async {
@@ -784,10 +812,13 @@ class _AuthentificationPage extends State<AuthentificationPage>
       _formState.save();
       try {
         FirebaseUser user = (await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: _emailSignUp, password: _passwordSignUp))
+                .createUserWithEmailAndPassword(
+                    email: _emailSignUp, password: _passwordSignUp))
             .user;
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => SelectLevelPage()));
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => SelectLevelPage()),
+            (_) => false);
       } catch (e) {
         print(e.message);
       }

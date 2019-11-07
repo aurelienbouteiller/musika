@@ -1,4 +1,5 @@
 import 'Artist.dart';
+import 'Level.dart';
 
 class Levels {
   List<Level> levels = List();
@@ -21,11 +22,4 @@ class Levels {
       });
     }
   }
-}
-
-class Level {
-  int id;
-  List<Artist> artistList;
-
-  Level({this.id, this.artistList});
 }
