@@ -23,9 +23,6 @@ class _MusikaAppState extends State<MusikaApp> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        systemNavigationBarColor: Themee.Colors.loginGradientEnd,
-        statusBarColor: Colors.transparent));
 
     return FutureBuilder(
         future: _userInitialisation(),
