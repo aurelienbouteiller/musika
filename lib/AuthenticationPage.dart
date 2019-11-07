@@ -6,7 +6,7 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:musika/SelectLevelPage.dart';
-import 'package:musika/style/theme.dart' as Theme;
+import 'package:musika/authentification/widgets/SignUp.dart';
 import 'package:musika/widget/bubble_indication_painter.dart';
 
 import 'model/User.dart';
@@ -35,8 +35,6 @@ class _AuthenticationPage extends State<AuthenticationPage>
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   bool _obscureTextLogin = true;
-  bool _obscureTextSignup = true;
-  bool _obscureTextSignupConfirm = true;
 
   TextEditingController signupEmailController = TextEditingController();
   TextEditingController signupNameController = TextEditingController();
@@ -51,17 +49,19 @@ class _AuthenticationPage extends State<AuthenticationPage>
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _containerKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> _formKeySignUp = GlobalKey<FormState>();
-  final GlobalKey<FormState> _containerKeySignUp = GlobalKey<FormState>();
   GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       'email',
     ],
   );
-  String _email, _password, _emailSignUp, _passwordSignUp, _nameSignUp;
+  String _email, _password;
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColor = Theme.of(context).primaryColor;
+    final Color accentColor = Theme.of(context).accentColor;
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       key: _scaffoldKey,
       body: NotificationListener<OverscrollIndicatorNotification>(
@@ -74,16 +74,15 @@ class _AuthenticationPage extends State<AuthenticationPage>
             height: MediaQuery.of(context).size.height >= 775.0
                 ? MediaQuery.of(context).size.height
                 : 775.0,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [
-                    Theme.Colors.loginGradientStart,
-                    Theme.Colors.loginGradientEnd
-                  ],
-                  begin: const FractionalOffset(0.0, 0.0),
-                  stops: [0.0, 1.0],
-                  tileMode: TileMode.clamp),
-            ),
+            decoration: isDark
+                ? BoxDecoration(color: Theme.of(context).backgroundColor)
+                : BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: [primaryColor, accentColor],
+                        begin: const FractionalOffset(0.0, 0.0),
+                        stops: [0.0, 1.0],
+                        tileMode: TileMode.clamp),
+                  ),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
@@ -115,7 +114,9 @@ class _AuthenticationPage extends State<AuthenticationPage>
                       ),
                       ConstrainedBox(
                         constraints: BoxConstraints.expand(),
-                        child: _buildSignUp(context),
+                        child: SignUp(
+                          auth: _auth,
+                        ),
                       ),
                     ],
                   ),
@@ -167,11 +168,13 @@ class _AuthenticationPage extends State<AuthenticationPage>
   }
 
   Widget _buildMenuBar(BuildContext context) {
+    final Color primaryColor = Theme.of(context).primaryColor;
+
     return Container(
       width: 300.0,
       height: 50.0,
       decoration: BoxDecoration(
-        color: Color(0x552B2B2B),
+        color: primaryColor,
         borderRadius: BorderRadius.all(Radius.circular(25.0)),
       ),
       child: CustomPaint(
@@ -215,6 +218,9 @@ class _AuthenticationPage extends State<AuthenticationPage>
   }
 
   Widget _buildSignIn(BuildContext context) {
+    final Color primaryColor = Theme.of(context).primaryColor;
+    final Color accentColor = Theme.of(context).accentColor;
+
     return Container(
       padding: EdgeInsets.only(top: 23.0),
       child: Column(
@@ -335,21 +341,18 @@ class _AuthenticationPage extends State<AuthenticationPage>
                           borderRadius: BorderRadius.all(Radius.circular(5.0)),
                           boxShadow: <BoxShadow>[
                             BoxShadow(
-                              color: Theme.Colors.loginGradientStart,
+                              color: primaryColor,
                               offset: Offset(1.0, 6.0),
                               blurRadius: 20.0,
                             ),
                             BoxShadow(
-                              color: Theme.Colors.loginGradientEnd,
+                              color: accentColor,
                               offset: Offset(1.0, 6.0),
                               blurRadius: 20.0,
                             ),
                           ],
                           gradient: LinearGradient(
-                              colors: [
-                                Theme.Colors.loginGradientEnd,
-                                Theme.Colors.loginGradientStart
-                              ],
+                              colors: [accentColor, primaryColor],
                               begin: const FractionalOffset(0.2, 0.2),
                               end: const FractionalOffset(1.0, 1.0),
                               stops: [0.0, 1.0],
@@ -357,7 +360,7 @@ class _AuthenticationPage extends State<AuthenticationPage>
                         ),
                         child: MaterialButton(
                           highlightColor: Colors.transparent,
-                          splashColor: Theme.Colors.loginGradientEnd,
+                          splashColor: accentColor,
                           //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -485,242 +488,6 @@ class _AuthenticationPage extends State<AuthenticationPage>
     );
   }
 
-  Widget _buildSignUp(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: 23.0),
-      child: Column(
-        children: <Widget>[
-          Form(
-            key: _formKeySignUp,
-            child: Container(
-              key: _containerKeySignUp,
-              child: Stack(
-                alignment: Alignment.topCenter,
-                overflow: Overflow.visible,
-                children: <Widget>[
-                  Card(
-                    elevation: 2.0,
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Container(
-                      width: 300.0,
-                      height: 360.0,
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: 20.0,
-                                bottom: 20.0,
-                                left: 25.0,
-                                right: 25.0),
-                            child: TextFormField(
-                              focusNode: myFocusNodeName,
-                              controller: signupNameController,
-                              keyboardType: TextInputType.text,
-                              textCapitalization: TextCapitalization.words,
-                              style: TextStyle(
-                                  fontFamily: "WorkSansSemiBold",
-                                  fontSize: 16.0,
-                                  color: Colors.black),
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                icon: Icon(
-                                  FontAwesomeIcons.user,
-                                  color: Colors.black,
-                                ),
-                                hintText: "Nom",
-                                hintStyle: TextStyle(
-                                    fontFamily: "WorkSansSemiBold",
-                                    fontSize: 16.0),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: 250.0,
-                            height: 1.0,
-                            color: Colors.grey[400],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: 20.0,
-                                bottom: 20.0,
-                                left: 25.0,
-                                right: 25.0),
-                            child: TextFormField(
-                              validator: (input) {
-                                if (input.isEmpty) {
-                                  return 'Email manquant';
-                                }
-                              },
-                              focusNode: myFocusNodeEmail,
-                              controller: signupEmailController,
-                              keyboardType: TextInputType.emailAddress,
-                              style: TextStyle(
-                                  fontFamily: "WorkSansSemiBold",
-                                  fontSize: 16.0,
-                                  color: Colors.black),
-                              onSaved: (input) => _emailSignUp = input,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                icon: Icon(
-                                  FontAwesomeIcons.envelope,
-                                  color: Colors.black,
-                                ),
-                                hintText: "Adresse email",
-                                hintStyle: TextStyle(
-                                    fontFamily: "WorkSansSemiBold",
-                                    fontSize: 16.0),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: 250.0,
-                            height: 1.0,
-                            color: Colors.grey[400],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: 20.0,
-                                bottom: 20.0,
-                                left: 25.0,
-                                right: 25.0),
-                            child: TextFormField(
-                              validator: (input) {
-                                if (input.length < 6) {
-                                  return 'Le mot de passe n'
-                                      'est pas assez long !';
-                                }
-                              },
-                              focusNode: myFocusNodePassword,
-                              controller: signupPasswordController,
-                              obscureText: _obscureTextSignup,
-                              style: TextStyle(
-                                  fontFamily: "WorkSansSemiBold",
-                                  fontSize: 16.0,
-                                  color: Colors.black),
-                              onSaved: (input) => _passwordSignUp = input,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                icon: Icon(
-                                  FontAwesomeIcons.lock,
-                                  color: Colors.black,
-                                ),
-                                hintText: "Mot de passe",
-                                hintStyle: TextStyle(
-                                    fontFamily: "WorkSansSemiBold",
-                                    fontSize: 16.0),
-                                suffixIcon: GestureDetector(
-                                  onTap: _toggleSignup,
-                                  child: Icon(
-                                    _obscureTextSignup
-                                        ? FontAwesomeIcons.eye
-                                        : FontAwesomeIcons.eyeSlash,
-                                    size: 15.0,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: 250.0,
-                            height: 1.0,
-                            color: Colors.grey[400],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: 20.0,
-                                bottom: 20.0,
-                                left: 25.0,
-                                right: 25.0),
-                            child: TextFormField(
-                              controller: signupConfirmPasswordController,
-                              obscureText: _obscureTextSignupConfirm,
-                              style: TextStyle(
-                                  fontFamily: "WorkSansSemiBold",
-                                  fontSize: 16.0,
-                                  color: Colors.black),
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                icon: Icon(
-                                  FontAwesomeIcons.lock,
-                                  color: Colors.black,
-                                ),
-                                hintText: "Confirmation",
-                                hintStyle: TextStyle(
-                                    fontFamily: "WorkSansSemiBold",
-                                    fontSize: 16.0),
-                                suffixIcon: GestureDetector(
-                                  onTap: _toggleSignupConfirm,
-                                  child: Icon(
-                                    _obscureTextSignupConfirm
-                                        ? FontAwesomeIcons.eye
-                                        : FontAwesomeIcons.eyeSlash,
-                                    size: 15.0,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 340.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                          color: Theme.Colors.loginGradientStart,
-                          offset: Offset(1.0, 6.0),
-                          blurRadius: 20.0,
-                        ),
-                        BoxShadow(
-                          color: Theme.Colors.loginGradientEnd,
-                          offset: Offset(1.0, 6.0),
-                          blurRadius: 20.0,
-                        ),
-                      ],
-                      gradient: LinearGradient(
-                          colors: [
-                            Theme.Colors.loginGradientEnd,
-                            Theme.Colors.loginGradientStart
-                          ],
-                          begin: const FractionalOffset(0.2, 0.2),
-                          end: const FractionalOffset(1.0, 1.0),
-                          stops: [0.0, 1.0],
-                          tileMode: TileMode.clamp),
-                    ),
-                    child: MaterialButton(
-                        highlightColor: Colors.transparent,
-                        splashColor: Theme.Colors.loginGradientEnd,
-                        //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 42.0),
-                          child: Text(
-                            "INSCRIPTION",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25.0,
-                                fontFamily: "WorkSansBold"),
-                          ),
-                        ),
-                        onPressed: () => _signUp()),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _onSignInButtonPress() {
     _pageController.animateToPage(0,
         duration: Duration(milliseconds: 500), curve: Curves.decelerate);
@@ -734,18 +501,6 @@ class _AuthenticationPage extends State<AuthenticationPage>
   void _toggleLogin() {
     setState(() {
       _obscureTextLogin = !_obscureTextLogin;
-    });
-  }
-
-  void _toggleSignup() {
-    setState(() {
-      _obscureTextSignup = !_obscureTextSignup;
-    });
-  }
-
-  void _toggleSignupConfirm() {
-    setState(() {
-      _obscureTextSignupConfirm = !_obscureTextSignupConfirm;
     });
   }
 
@@ -833,33 +588,6 @@ class _AuthenticationPage extends State<AuthenticationPage>
           (_) => false);
     } else {
       showInSnackBar("Connection annulé");
-    }
-  }
-
-  void _signUp() async {
-    final _formState = _formKeySignUp.currentState;
-    if (_formState.validate()) {
-      _formState.save();
-      try {
-        FirebaseUser user = (await FirebaseAuth.instance
-                .createUserWithEmailAndPassword(
-                    email: _emailSignUp, password: _passwordSignUp))
-            .user;
-
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (context) => SelectLevelPage(
-                    user: User(
-                        name: user.displayName,
-                        email: user.email,
-                        isConnected: true,
-                        uid: user.uid))),
-            (_) => false);
-      } catch (e) {
-        showInSnackBar("Inscription refusé");
-        print(e.message);
-      }
     }
   }
 }

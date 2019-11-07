@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:musika/style/theme.dart' as Theme;
 
 import '../../SelectLevelPage.dart';
 
@@ -35,12 +34,23 @@ class _SignUpState extends State<SignUp> {
     if (_formState.validate()) {
       _formState.save();
       try {
-        FirebaseUser user = (await widget.auth.createUserWithEmailAndPassword(
-                email: _emailSignUp, password: _passwordSignUp))
+        FirebaseUser user = (await FirebaseAuth.instance
+                .createUserWithEmailAndPassword(
+                    email: _emailSignUp, password: _passwordSignUp))
             .user;
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => SelectLevelPage()));
+
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SelectLevelPage(
+                    user: User(
+                        name: user.displayName,
+                        email: user.email,
+                        isConnected: true,
+                        uid: user.uid))),
+            (_) => false);
       } catch (e) {
+        showInSnackBar("Inscription refusé");
         print(e.message);
       }
     }
@@ -60,6 +70,9 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColor = Theme.of(context).primaryColor;
+    final Color accentColor = Theme.of(context).accentColor;
+
     return Container(
       padding: EdgeInsets.only(top: 23.0),
       child: Column(
@@ -248,21 +261,18 @@ class _SignUpState extends State<SignUp> {
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
-                          color: Theme.Colors.loginGradientStart,
+                          color: primaryColor,
                           offset: Offset(1.0, 6.0),
                           blurRadius: 20.0,
                         ),
                         BoxShadow(
-                          color: Theme.Colors.loginGradientEnd,
+                          color: accentColor,
                           offset: Offset(1.0, 6.0),
                           blurRadius: 20.0,
                         ),
                       ],
                       gradient: LinearGradient(
-                          colors: [
-                            Theme.Colors.loginGradientEnd,
-                            Theme.Colors.loginGradientStart
-                          ],
+                          colors: [accentColor, primaryColor],
                           begin: const FractionalOffset(0.2, 0.2),
                           end: const FractionalOffset(1.0, 1.0),
                           stops: [0.0, 1.0],
@@ -270,7 +280,7 @@ class _SignUpState extends State<SignUp> {
                     ),
                     child: MaterialButton(
                         highlightColor: Colors.transparent,
-                        splashColor: Theme.Colors.loginGradientEnd,
+                        splashColor: accentColor,
                         //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(

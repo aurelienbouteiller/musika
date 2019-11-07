@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:musika/SelectArtistPage.dart';
 import 'package:musika/StatsPage.dart';
 import 'package:musika/model/Artist.dart';
-import 'package:musika/style/theme.dart' as Themee;
 
 import 'AuthenticationPage.dart';
 import 'model/Artist.dart';
@@ -121,6 +120,12 @@ class _SelectLevelPageState extends State<SelectLevelPage> {
 
   @override
   Widget build(BuildContext context) {
+    Rect rectForShader = Rect.fromLTWH(0.0, 0.0, 200.0, 70.0);
+    Shader linearGradientShader = LinearGradient(colors: [
+      Theme.of(context).primaryColor,
+      Theme.of(context).accentColor
+    ]).createShader(rectForShader);
+
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
@@ -167,7 +172,7 @@ class _SelectLevelPageState extends State<SelectLevelPage> {
         title: Center(
             child: Text("Sélection du niveau",
                 style: TextStyle(color: Colors.white))),
-        backgroundColor: Themee.Colors.loginGradientStart,
+        backgroundColor: Theme.of(context).primaryColor,
         iconTheme: IconThemeData(color: Colors.white),
       ),
       backgroundColor: Colors.transparent,
@@ -179,8 +184,8 @@ class _SelectLevelPageState extends State<SelectLevelPage> {
           decoration: new BoxDecoration(
             gradient: new LinearGradient(
                 colors: [
-                  Themee.Colors.loginGradientStart,
-                  Themee.Colors.loginGradientEnd
+                  Theme.of(context).primaryColor,
+                  Theme.of(context).accentColor
                 ],
                 begin: FractionalOffset(0.0, 0.0),
                 stops: [0.0, 1.0],
@@ -224,18 +229,20 @@ class _SelectLevelPageState extends State<SelectLevelPage> {
                                 child: ListTile(
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20.0, vertical: 10.0),
-                                  title: Text("Niveau $levelId",
-                                      style: TextStyle(
-                                          foreground: Paint()
-                                            ..shader =
-                                                Themee.Colors.linearGradient,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15)),
+                                  title: Text(
+                                    "Niveau $levelId",
+                                    style: TextStyle(
+                                      foreground: Paint()
+                                        ..shader = linearGradientShader,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                  ),
                                   trailing: Icon(
                                       (index > 2 && !widget.user.isConnected)
                                           ? Icons.lock
                                           : Icons.keyboard_arrow_right,
-                                      color: Themee.Colors.loginGradientEnd),
+                                      color: Theme.of(context).accentColor),
                                   onTap: () {
                                     (index > 2 && !widget.user.isConnected)
                                         ? _showSnackLogin(context)
@@ -247,13 +254,13 @@ class _SelectLevelPageState extends State<SelectLevelPage> {
                                     child: Row(
                                       children: <Widget>[
                                         Icon(Icons.linear_scale,
-                                            color: Themee
-                                                .Colors.loginGradientStart),
+                                            color:
+                                                Theme.of(context).primaryColor),
                                         Text("0/5 artistes trouvés",
                                             style: TextStyle(
                                                 foreground: Paint()
-                                                  ..shader = Themee
-                                                      .Colors.linearGradient))
+                                                  ..shader =
+                                                      linearGradientShader))
                                       ],
                                     ),
                                   ),

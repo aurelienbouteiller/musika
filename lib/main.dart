@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:musika/SelectLevelPage.dart';
 import 'package:musika/StatsPage.dart';
-import 'package:musika/style/theme.dart' as Themee;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'model/User.dart';
@@ -60,16 +59,16 @@ class _MusikaAppState extends State<MusikaApp> {
               home: SelectLevelPage(user: user),
               theme: ThemeData(
                   brightness: Brightness.light,
-                  primaryColor: Color(0xFFfdcb6e),
+                  primaryColor: Color(0xFFFDC830),
                   backgroundColor: Color(0xFFdfe6e9),
-                  accentColor: Color(0xFFe17055),
+                  accentColor: Color(0xFFF37335),
                   dividerColor: Color(0xFFdfe6e9),
                   secondaryHeaderColor: Colors.white),
               darkTheme: ThemeData(
                   brightness: Brightness.dark,
                   primaryColor: Color(0xFF3a4750),
                   backgroundColor: Colors.black,
-                  accentColor: Color(0xFFe17055),
+                  accentColor: Color(0xFF3a4750),
                   dividerColor: Colors.white30,
                   secondaryHeaderColor: Colors.white70),
               debugShowCheckedModeBanner: false,
