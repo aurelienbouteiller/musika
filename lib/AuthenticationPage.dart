@@ -778,11 +778,22 @@ class _AuthenticationPage extends State<AuthenticationPage>
           await facebookLogin.logIn(['email', 'public_profile']);
       switch (result.status) {
         case FacebookLoginStatus.loggedIn:
+          FacebookAccessToken accessToken =
+              await facebookLogin.currentAccessToken;
+          final AuthCredential credential = FacebookAuthProvider.getCredential(
+              accessToken: accessToken.token);
+          final FirebaseUser user =
+              (await _auth.signInWithCredential(credential)).user;
+
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      SelectLevelPage(user: User(isConnected: true))),
+                  builder: (context) => SelectLevelPage(
+                      user: User(
+                          name: user.displayName,
+                          email: user.email,
+                          isConnected: true,
+                          uid: user.uid))),
               (_) => false);
           break;
         case FacebookLoginStatus.cancelledByUser:
@@ -799,13 +810,28 @@ class _AuthenticationPage extends State<AuthenticationPage>
   }
 
   void _signInGoogle() async {
-    GoogleSignInAccount result = await _googleSignIn.signIn();
-    if(result != null){
+    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    final FirebaseUser user =
+        (await _auth.signInWithCredential(credential)).user;
+
+    if (user != null) {
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => SelectLevelPage()),
-              (_) => false);
-    }else{
+          MaterialPageRoute(
+              builder: (context) => SelectLevelPage(
+                  user: User(
+                      name: user.displayName,
+                      email: user.email,
+                      isConnected: true,
+                      uid: user.uid))),
+          (_) => false);
+    } else {
       showInSnackBar("Connection annulé");
     }
   }
@@ -819,9 +845,16 @@ class _AuthenticationPage extends State<AuthenticationPage>
                 .createUserWithEmailAndPassword(
                     email: _emailSignUp, password: _passwordSignUp))
             .user;
+
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => SelectLevelPage()),
+            MaterialPageRoute(
+                builder: (context) => SelectLevelPage(
+                    user: User(
+                        name: user.displayName,
+                        email: user.email,
+                        isConnected: true,
+                        uid: user.uid))),
             (_) => false);
       } catch (e) {
         showInSnackBar("Inscription refusé");
