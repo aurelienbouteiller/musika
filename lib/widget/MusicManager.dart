@@ -6,12 +6,16 @@ class MusicManager extends StatefulWidget {
   final bool audioPlaying;
   final Function onPress;
   final bool isDisable;
+  final bool isFinish;
+  final Function onReloadPress;
 
   MusicManager(
       {Key key,
       @required this.onPress,
       @required this.audioPlaying,
-      @required this.isDisable,})
+      @required this.isDisable,
+      @required this.isFinish,
+      @required this.onReloadPress,})
       : super(key: key);
 
   @override
@@ -43,10 +47,12 @@ class _MusicManagerState extends State<MusicManager> {
             Colors.red,
           ],
           backgroundColor: Colors.transparent,
+          isFinish: widget.isFinish,
         ),
-        widget.audioPlaying || widget.isDisable
+        (widget.audioPlaying || widget.isDisable) && !widget.isFinish
             ? Container()
-            : FlatButton(
+            : !widget.isFinish
+            ?FlatButton(
                 onPressed: onPress,
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -62,7 +68,24 @@ class _MusicManagerState extends State<MusicManager> {
                     ),
                   ),
                 ),
+              )
+            :FlatButton(
+            onPressed: widget.onReloadPress,
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              child: Container(
+                color: Color(0xFF9F7E69),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.replay,
+                    color: Color(0xFFF2efc7),
+                    size: 50,
+                  ),
+                ),
               ),
+            ),
+          ),
       ],
     );
   }
