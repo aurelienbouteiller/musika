@@ -1,7 +1,7 @@
 import 'Levels.dart';
 
 class User {
-  int uid;
+  String uid;
   String email;
   bool isConnected;
   Levels levels;
