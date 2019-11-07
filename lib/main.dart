@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:musika/SelectLevelPage.dart';
+import 'package:musika/StatsPage.dart';
 import 'package:musika/style/theme.dart' as Themee;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,12 +28,12 @@ class _MusikaAppState extends State<MusikaApp> {
     AuthResult authResult = await FirebaseAuth.instance.signInAnonymously();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("token_user", authResult.user.uid);
-    return User(uid: authResult.user.uid, isConnected: false);
+    return User(uid: authResult.user.uid, isConnected: false, name: authResult.user.displayName, email: authResult.user.email);
   }
 
   Future<User> _loginUser() async {
     FirebaseUser fireBaseUser = await FirebaseAuth.instance.currentUser();
-    return fireBaseUser.isAnonymous ? User(uid:fireBaseUser.uid, isConnected: false) : User(uid: fireBaseUser.uid, isConnected: true);
+    return fireBaseUser.isAnonymous ? User(uid:fireBaseUser.uid, isConnected: false) : User(uid: fireBaseUser.uid, isConnected: true, name: fireBaseUser.displayName, email: fireBaseUser.email);
   }
 
   Future<User> _userInitialisation() async {
