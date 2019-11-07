@@ -128,4 +128,11 @@ class Track {
     data['type'] = this.type;
     return data;
   }
+
+  @override
+  String toString() {
+    return 'Track{id: $id, readable: $readable, title: $title, titleShort: $titleShort, titleVersion: $titleVersion, isrc: $isrc, link: $link, share: $share, duration: $duration, trackPosition: $trackPosition, diskNumber: $diskNumber, rank: $rank, releaseDate: $releaseDate, explicitLyrics: $explicitLyrics, explicitContentLyrics: $explicitContentLyrics, explicitContentCover: $explicitContentCover, preview: $preview, bpm: $bpm, gain: $gain, availableCountries: $availableCountries, contributors: $contributors, artist: $artist, album: $album, type: $type}';
+  }
+
+
 }

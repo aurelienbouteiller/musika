@@ -764,6 +764,7 @@ class _AuthenticationPage extends State<AuthenticationPage>
                       user: User(isConnected: true),
                     )));
       } catch (e) {
+        showInSnackBar("Connection annulé");
         print(e.message);
       }
     }
@@ -792,18 +793,21 @@ class _AuthenticationPage extends State<AuthenticationPage>
           break;
       }
     } catch (e) {
+      showInSnackBar("Connection annulé");
       print("Error in facebook sign in: $e");
     }
   }
 
   void _signInGoogle() async {
-    await _googleSignIn.signIn().whenComplete(() =>
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    SelectLevelPage(user: User(isConnected: true))),
-            (_) => false));
+    GoogleSignInAccount result = await _googleSignIn.signIn();
+    if(result != null){
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => SelectLevelPage()),
+              (_) => false);
+    }else{
+      showInSnackBar("Connection annulé");
+    }
   }
 
   void _signUp() async {
@@ -820,6 +824,7 @@ class _AuthenticationPage extends State<AuthenticationPage>
             MaterialPageRoute(builder: (context) => SelectLevelPage()),
             (_) => false);
       } catch (e) {
+        showInSnackBar("Inscription refusé");
         print(e.message);
       }
     }
