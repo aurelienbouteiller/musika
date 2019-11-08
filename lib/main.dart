@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:musika/SelectLevelPage.dart';
+import 'package:musika/StatsPage.dart';
 
 import 'model/User.dart';
 
