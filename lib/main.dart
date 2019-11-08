@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:musika/GuessSongPage.dart';
 import 'package:musika/SelectLevelPage.dart';
 import 'package:musika/StatsPage.dart';
+import 'package:musika/model/Artist.dart';
 
 import 'model/User.dart';
 
@@ -39,10 +41,8 @@ class _MusikaAppState extends State<MusikaApp> {
               print(snapshot.error.toString());
             }
 
-            User user = snapshot.data;
-
             return MaterialApp(
-              home: SelectLevelPage(user: user),
+              home: SelectLevelPage(user: snapshot.data),
               theme: ThemeData(
                   brightness: Brightness.light,
                   primaryColor: Color(0xFFFDC830),

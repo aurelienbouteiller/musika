@@ -64,7 +64,7 @@ class _SelectLevelPageState extends State<SelectLevelPage> {
     return levelsToAdd;
   }
 
-  navigateToArtistPage(BuildContext context, Level level) {
+  navigateToArtistPage(BuildContext context, Level level, User user) {
     Navigator.of(context).push(
       PageRouteBuilder<SelectArtistPage>(
         transitionDuration: Duration(milliseconds: 600),
@@ -73,7 +73,7 @@ class _SelectLevelPageState extends State<SelectLevelPage> {
           Animation<double> animation,
           Animation<double> secondaryAnimation,
         ) {
-          return SelectArtistPage(level: level);
+          return SelectArtistPage(level: level, user: user);
         },
         transitionsBuilder: (
           BuildContext context,
@@ -248,7 +248,7 @@ class _SelectLevelPageState extends State<SelectLevelPage> {
                                   onTap: () {
                                     (index > 2 && !widget.user.isConnected)
                                         ? _showSnackLogin(context)
-                                        : navigateToArtistPage(context, level);
+                                        : navigateToArtistPage(context, level, widget.user);
                                   },
                                   subtitle: Visibility(
                                     visible: !(index > 2 &&

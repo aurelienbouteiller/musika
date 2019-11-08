@@ -57,12 +57,12 @@ class _MusicManagerState extends State<MusicManager> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                   child: Container(
-                    color: Color(0xFF9F7E69),
+                    color: Colors.white,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Icon(
                         Icons.play_arrow,
-                        color: Color(0xFFF2efc7),
+                        color: Theme.of(context).accentColor,
                         size: 50,
                       ),
                     ),
@@ -74,12 +74,12 @@ class _MusicManagerState extends State<MusicManager> {
             child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(8)),
               child: Container(
-                color: Color(0xFF9F7E69),
+                color: Colors.white,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Icon(
                     Icons.replay,
-                    color: Color(0xFFF2efc7),
+                    color: Theme.of(context).accentColor,
                     size: 50,
                   ),
                 ),

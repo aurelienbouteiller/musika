@@ -6,6 +6,7 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:musika/widget/ArtistWidget.dart';
 import 'package:musika/widget/ChoiceWidget.dart';
 import 'package:musika/widget/MusicManager.dart';
@@ -46,9 +47,13 @@ class _GuessSongPageState extends State<GuessSongPage> {
     audioPlayer = AudioPlayer();
     audioPlayerPosition = 0;
     audioPlayer.onPlayerStateChanged.listen(onAudioChangePlaying);
-    audioPlayer.onAudioPositionChanged.listen((position) => setState(() {
+    audioPlayer.onAudioPositionChanged.listen((position) {
+      if (this.mounted) {
+        setState(() {
           audioPlayerPosition = position.inMilliseconds;
-        }));
+        });
+      }
+    });
     selectFourSongsOfTheArtist(widget.artist.id);
   }
 
@@ -57,15 +62,19 @@ class _GuessSongPageState extends State<GuessSongPage> {
       setState(() {
         isDisable = true;
         audioPlaying = playerEvent == AudioPlayerState.PLAYING;
-        isFinish = playerEvent == AudioPlayerState.STOPPED || playerEvent == AudioPlayerState.COMPLETED;
+        isFinish = playerEvent == AudioPlayerState.STOPPED ||
+            playerEvent == AudioPlayerState.COMPLETED;
       });
     }
   }
 
   selectFourSongsOfTheArtist(int artistId) async {
-    setState(() {
-      loadingTrack = true;
-    });
+    if (this.mounted) {
+      setState(() {
+        loadingTrack = true;
+      });
+    }
+
     var data = await ApiDeezer.getTopMusicByArtisteId(artistId);
     List<dynamic> body = json.decode(data.body)['data'];
     var tracks = body.map((t) => Track.fromJson(t)).toList();
@@ -86,15 +95,18 @@ class _GuessSongPageState extends State<GuessSongPage> {
       }
       randomTracks.add(randomTrack);
     }
-    setState(() {
-      selectedTracks = randomTracks;
-      selectedTracksTitles =
-          selectedTracks.map((track) => track.title).toList();
-      selectedTrack = randomTracks.elementAt(random.nextInt(4));
-      selectedTitleIndex = selectedTracksTitles
-          .indexWhere((title) => selectedTrack.title == title);
-      loadingTrack = false;
-    });
+
+    if (this.mounted) {
+      setState(() {
+        selectedTracks = randomTracks;
+        selectedTracksTitles =
+            selectedTracks.map((track) => track.title).toList();
+        selectedTrack = randomTracks.elementAt(random.nextInt(4));
+        selectedTitleIndex = selectedTracksTitles
+            .indexWhere((title) => selectedTrack.title == title);
+        loadingTrack = false;
+      });
+    }
   }
 
   onChoicePress(chosenTitle) async {
@@ -134,7 +146,7 @@ class _GuessSongPageState extends State<GuessSongPage> {
     audioPlayer.play(selectedTrack?.preview);
   }
 
-  onReplayPress(){
+  onReplayPress() {
     answered = false;
     audioPlaying = false;
     isDisable = false;
@@ -145,77 +157,83 @@ class _GuessSongPageState extends State<GuessSongPage> {
   @override
   Widget build(BuildContext context) {
     final FlareControls _controls = FlareControls();
-
     return Scaffold(
         body: SafeArea(
-      child: loadingTrack
-          ? Center(child: CircularProgressIndicator())
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                  Expanded(
-                    flex: 2,
-                    child: Stack(
-                      alignment: Alignment.topCenter,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Card(
-                            elevation: 5,
-                            color: Theme.of(context).primaryColor,
-                            child: ClipRRect(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
-                              child: Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Expanded(
-                                      flex: 1,
-                                      child: FlareActor(
-                                        "assets/gramophone.flr",
-                                        alignment: Alignment.center,
-                                        animation: "run",
-                                        controller: _controls,
-                                        isPaused: !audioPlaying,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: MusicManager(
-                                        onPress: onPlayButtonPress,
-                                        audioPlaying: audioPlaying &&
-                                            audioPlayerPosition > 0,
-                                        isDisable: isDisable,
-                                        isFinish: isFinish,
-                                        onReloadPress: onReplayPress,
-                                      ),
-                                    ),
-                                  ],
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              colors: [
+                Theme.of(context).primaryColor,
+                Theme.of(context).accentColor
+              ],
+              begin: FractionalOffset(0.0, 0.0),
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp),
+        ),
+        child: loadingTrack
+            ? Center(
+                child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(Colors.white),
+              ))
+            : Column(children: <Widget>[
+                Expanded(
+                  flex: 2,
+                  child: Stack(
+                    alignment: Alignment.topCenter,
+                    children: [
+                      Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              child: Expanded(
+                                flex: 1,
+                                child: Container(
+                                  margin: EdgeInsets.only(top: 40.0),
+                                  child: FlareActor(
+                                    "assets/gramophone.flr",
+                                    alignment: Alignment.center,
+                                    animation: "run",
+                                    controller: _controls,
+                                    isPaused: !audioPlaying,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                            Expanded(
+                              flex: 1,
+                              child: MusicManager(
+                                onPress: onPlayButtonPress,
+                                audioPlaying:
+                                    audioPlaying && audioPlayerPosition > 0,
+                                isDisable: isDisable,
+                                isFinish: isFinish,
+                                onReloadPress: onReplayPress,
+                              ),
+                            ),
+                          ],
                         ),
-                        ArtistWidget(
-                          artistName: selectedTrack?.artist?.name,
-                          imageUrl:
-                              "https://api.deezer.com/artist/${widget.artist.id}/image",
-                        ),
-                      ],
-                    ),
+                      ),
+                      ArtistWidget(
+                        artistName: selectedTrack?.artist?.name,
+                        imageUrl:
+                            "https://api.deezer.com/artist/${widget.artist.id}/image",
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: ChoiceWidget(
-                        titles: selectedTracksTitles,
-                        selectedTitleIndex: selectedTitleIndex,
-                        chosenTitleIndex: chosenTitleIndex,
-                        onPress: onChoicePress,
-                        answered: answered,
-                        disabled: !audioPlaying && !answered),
-                  )
-                ]),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: ChoiceWidget(
+                      titles: selectedTracksTitles,
+                      selectedTitleIndex: selectedTitleIndex,
+                      chosenTitleIndex: chosenTitleIndex,
+                      onPress: onChoicePress,
+                      answered: answered,
+                      disabled: !audioPlaying && !answered),
+                )
+              ]),
+      ),
     ));
   }
 
