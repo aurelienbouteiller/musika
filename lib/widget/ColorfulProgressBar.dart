@@ -108,7 +108,7 @@ class _ColorfulProgressBarState extends State<ColorfulProgressBar>
                   builder: (context, child) {
                     return Text(
                       timerString,
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold ),
                     );
                   },
                 ),

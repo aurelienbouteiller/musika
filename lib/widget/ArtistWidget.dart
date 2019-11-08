@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ArtistWidget extends StatefulWidget {
   const ArtistWidget({Key key, this.artistName, this.imageUrl})
@@ -36,7 +37,8 @@ class _ArtistWidgetState extends State<ArtistWidget> {
   }
 
   @override
-  Widget build(BuildContext context) => Padding(
+  Widget build(BuildContext context) {
+    return Padding(
         padding: const EdgeInsets.only(top: 20.0),
         child: Align(
           alignment: Alignment.topLeft,
@@ -55,34 +57,39 @@ class _ArtistWidgetState extends State<ArtistWidget> {
                 height: 140,
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Color(0xffBE5A38),
+                  color: (MediaQuery.of(context).platformBrightness) != Brightness.dark ? Theme.of(context).accentColor : Colors.white,
                   borderRadius: BorderRadius.only(
                     topRight: Radius.circular(40),
                     bottomRight: Radius.circular(40),
                   ),
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    CircleAvatar(
-                      radius: 30,
-                      backgroundImage: NetworkImage(widget.imageUrl),
-                    ),
-                    Text(
-                      widget.artistName,
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      style: TextStyle(
-                        color: Color(0xFFF7EDDC),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundImage: NetworkImage(widget.imageUrl),
                       ),
-                    ),
-                  ],
+                      Container(
+                        child: Text(
+                          widget.artistName,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          style: TextStyle(
+                            color: (MediaQuery.of(context).platformBrightness) == Brightness.dark ? Theme.of(context).accentColor : Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
         ),
       );
+  }
 }

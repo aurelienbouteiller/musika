@@ -21,7 +21,7 @@ class ChoiceWidget extends StatelessWidget {
       ? chosenTitleIndex == choiceIndex
           ? selectedTitleIndex == choiceIndex ? Colors.green : Colors.red
           : selectedTitleIndex == choiceIndex ? Colors.green : Colors.grey
-      : Theme.of(context).primaryColor;
+      : Colors.white;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +44,7 @@ class ChoiceWidget extends StatelessWidget {
                     title: title,
                     onPress: onPress,
                     disabled: disabled,
+                    answered: answered,
                     color: choiceColorForIndex(context, choiceIndex++)))
                 .toList(),
           ),
@@ -56,6 +57,7 @@ class ChoiceWidget extends StatelessWidget {
                     title: title,
                     onPress: onPress,
                     disabled: disabled,
+                    answered: answered,
                     color: choiceColorForIndex(context, choiceIndex++)))
                 .toList(),
           ),
