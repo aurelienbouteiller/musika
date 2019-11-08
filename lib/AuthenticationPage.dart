@@ -87,9 +87,9 @@ class _AuthenticationPage extends State<AuthenticationPage>
       body: SingleChildScrollView(
         child: Container(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height >= 775.0
+          height: MediaQuery.of(context).size.height >= 600.0
               ? MediaQuery.of(context).size.height
-              : 775.0,
+              : 600.0,
           decoration: isDark
               ? BoxDecoration(color: Theme.of(context).backgroundColor)
               : BoxDecoration(
